@@ -64,15 +64,22 @@ export function calcCOMFromPoints(points){
     return centerOfMass;
 }
 
-export function linesIntersection(p1, p2, p3, p4){
-    let denominator = (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0]);
-    if(denominator === 0) return null; // Lines are parallel
+export function linesIntersection(p1, p2, p3, p4, eps = 1e-2) {
+    const denominator =
+        (p2[0] - p1[0]) * (p4[1] - p3[1]) -
+        (p2[1] - p1[1]) * (p4[0] - p3[0]);
 
-    let ua = ((p4[0] - p3[0]) * (p1[1] - p3[1]) - (p4[1] - p3[1]) * (p1[0] - p3[0])) / denominator;
-    let ub = ((p2[0] - p1[0]) * (p1[1] - p3[1]) - (p2[1] - p1[1]) * (p1[0] - p3[0])) / denominator;
+    if (Math.abs(denominator) < eps) return null; // Parallel oder kollinear
 
-    if(ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1){
-        return [p1[0] + ua * (p2[0] - p1[0]), p1[1] + ua * (p2[1] - p1[1])];
+    const ua = ((p4[0] - p3[0]) * (p1[1] - p3[1]) - (p4[1] - p3[1]) * (p1[0] - p3[0])) / denominator;
+    const ub = ((p2[0] - p1[0]) * (p1[1] - p3[1]) - (p2[1] - p1[1]) * (p1[0] - p3[0])) / denominator;
+
+    if (ua >= -eps && ua <= 1 + eps && ub >= -eps && ub <= 1 + eps) {
+        return [
+            p1[0] + ua * (p2[0] - p1[0]),
+            p1[1] + ua * (p2[1] - p1[1]),
+        ];
     }
-    return null; // No intersection within the line segments
+
+    return null;
 }

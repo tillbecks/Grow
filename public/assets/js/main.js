@@ -2,13 +2,8 @@ import * as TREE from "./tree.js";
 import * as UTILS from "./utils.js";
 
 var strokes = [];
-//Eine StrokeConstruction beinhaltet
-//- Ein Array von Strokes
-//- Ein Array von JoinPoints
-//- Einen Startpunktindex
-var strokeConstructions = [];
-
-var strokeConstructionsStarts = [];
+var strokeStarts = [];
+var strokeStartsCache = [];
 var structs = [];
 
 var abordGrow = false;
@@ -19,12 +14,12 @@ var startPointMode = false;
 var joinPointMode = false;
 
 var potentialJoinPoints = [];
-var usedJoinPoints = [];
+var joinPoints = [];
 
 var thisJoinPoint = null;
-
-var setStartPoint = false;
 var thisStartPoint = null;
+
+var debug = false;
 
 let actionQueue = Promise.resolve();
 
@@ -50,6 +45,8 @@ const startPointButton = document.getElementById('startPointButton');
 startPointButton.addEventListener("click", setStartPointModus);
 const joinPointButton = document.getElementById('joinPointButton');
 joinPointButton.addEventListener("click", setJoinPointModus);
+const downloadButton = document.getElementById('downloadButton');
+downloadButton.addEventListener("click", downloadCanvasAsImage);
 
 document.onmousemove = handleMouseMove;
 document.onmousedown = handleMouseDown;
@@ -73,7 +70,9 @@ async function totalReset(){
     structs = [];
     canvas.erase();
     strokes = [];
-    strokeConstructionsStarts = [];
+    strokeStarts = [];
+    strokeStartsCache = [];
+    joinPoints = [];
 }
 
 async function growReset(){
@@ -82,7 +81,7 @@ async function growReset(){
     structs = [];
 }
 
-async function abordGrowing(){ //If 
+async function abordGrowing(){
     if(getPlay()){
         setAbordGrow(true);
         await waitUntil(() => !getPlay());
@@ -97,19 +96,24 @@ async function grow(){
         checkStrokeStarts();
     }
 
-    structs = createStructsFromStrokes(strokes, strokeConstructionsStarts);
+    structs = createStructRootsFromStrokes(strokes, strokeStarts, joinPoints);
      
-    setPlay(true);
-    growStructs(()=>structs, canvasContext, getAbordGrow, setAbordGrow, getPlay);
+    growStructs(()=>structs, canvasContext, getAbordGrow, setAbordGrow, getPlay, setPlay);
 }
 
 function checkStrokeStarts(){
-    if(strokeConstructionsStarts.length > strokes.length){
-        strokeConstructionsStarts = strokeConstructionsStarts.slice(0, strokes.length);
+    if(strokeStarts.length > strokes.length){
+        strokeStarts = strokeStarts.slice(0, strokes.length);
     }
     for(let i=0; i<strokes.length; i++){
-        if(i >= strokeConstructionsStarts.length || strokeConstructionsStarts[i] >= strokes[i].length){ 
-            strokeConstructionsStarts[i] = Math.floor(strokes[i].length/2);
+        if(!hasStartPoint(i)){
+            if(strokeStartsCache[i] && strokeStartsCache[i] < strokes[i].length){
+                strokeStarts[i] = strokeStartsCache[i];
+            }
+            else{
+                strokeStarts[i] = Math.floor(strokes[i].length/2);
+                strokeStartsCache[i] = strokeStarts[i];
+            }
         }
     }
 }
@@ -138,18 +142,17 @@ function setEditMode(){
         canvas.deactivate();
         if(canvas.hasChanged){
             strokes = strokeTransformation(canvas.getTrace());
-            strokeConstructionsStarts = setStrokeStarts(strokes);
+            checkStrokeStarts();
         }
         startPointButton.style.visibility = "visible";
         joinPointButton.style.visibility = "visible";
         pureCanvas.style.cursor = "not-allowed";
         editModeButton.value = "Exit Edit Mode"; 
 
-        drawEditMode(canvasContext, strokes, strokeConstructionsStarts);
+        drawEditMode(canvasContext, strokes, strokeStarts);
         resetButton.disabled = true;
         growButton.disabled = true;
         resetGrowButton.disabled = true;
-        stopGrowButton.disabled = true;
 
         calculateJoinPoints();
     }
@@ -168,7 +171,6 @@ function setEditMode(){
         resetButton.disabled = false;
         growButton.disabled = false;
         resetGrowButton.disabled = false;
-        stopGrowButton.disabled = false;
     }
 }
 
@@ -202,8 +204,8 @@ function calculateJoinPoints(){
                             potentialJoinPoints.push({strokeA: i, pointAIndex: k+1, strokeB: j, pointBIndex: l+1, intersection: intersec});
                             k++;
                             l++;
-                            if(strokeConstructionsStarts[i] > k) strokeConstructionsStarts[i]++;
-                            if(strokeConstructionsStarts[j] > l) strokeConstructionsStarts[j]++;
+                            if(strokeStarts[i] > k) strokeStarts[i]++;
+                            if(strokeStarts[j] > l) strokeStarts[j]++;
                         }
                     }
                 }
@@ -275,8 +277,8 @@ function handleMouseDown(event) {
 
 function mouseDownStartPoint(event){
     if(startPointMode && thisStartPoint){
-        strokeConstructionsStarts[thisStartPoint.strokeIndex] = thisStartPoint.pointIndex;
-        drawEditMode(canvasContext, strokes, strokeConstructionsStarts);
+        addStartPoint(thisStartPoint.pointIndex, thisStartPoint.strokeIndex);
+        drawEditMode(canvasContext, strokes, strokeStarts);
     }
 }
 
@@ -284,79 +286,204 @@ function mouseDownJoinPoint(event){
     if(joinPointMode && thisJoinPoint){
         let index = findUsedJoinPointIndex(thisJoinPoint);
         if(index === -1){
-            usedJoinPoints.push(thisJoinPoint);
+            addJoinPoint(thisJoinPoint);
         }
         else{
-            usedJoinPoints.splice(index, 1);
+            removeJoinPoint(thisJoinPoint);
         }
-        drawEditMode(canvasContext, strokes, strokeConstructionsStarts);
+        drawEditMode(canvasContext, strokes, strokeStarts);
     }
 }
 
 function findUsedJoinPointIndex(joinPoint){
-    for(let i = 0; i < usedJoinPoints.length; i++){
-        if(UTILS.calcDistance(usedJoinPoints[i].intersection, joinPoint.intersection) < 1){
+    for(let i = 0; i < joinPoints.length; i++){
+        if(UTILS.calcDistance(joinPoints[i].intersection, joinPoint.intersection) < 1){
             return i;
         }
     }
     return -1;
 }
 
-/**
- * @param {*} strokes This parameter is a 2D array containing x and y coordinates of all strokes
- * @param {*} startPointPosition This parameter is a tuple of x and y coordinates, that should be contained in strokes
- */
-function createStructsFromStrokes(strokes, startPointPosition){
+function detectJoinPointCycle(newJoinPoint){
+    if (crawlApply(newJoinPoint.strokeA, [], (indice, beforeIndice) => {
+        if(indice === newJoinPoint.strokeB){
+            return true;
+        }
+    })) return true;
+    if (crawlApply(newJoinPoint.strokeB, [], (indice, beforeIndice) => {
+        if(indice === newJoinPoint.strokeA){
+            return true;
+        }
+    })) return true;
+    return false;
+}
 
+function removeJoinPoint(joinPoint){
+    let index = findUsedJoinPointIndex(joinPoint);
+    if(index !== -1){
+        joinPoints.splice(index, 1);
+
+        //Sollte funktionieren, da er alle Strokes durchgeht und fehlende Startpunkte ergänzt
+        checkStrokeStarts();
+    }
+}
+
+function addJoinPoint(joinPoint){
+    if(detectJoinPointCycle(joinPoint)){
+        alert("Joining these points would create a cycle. Operation cancelled.");
+    }
+    else{
+        if(strokeStarts[joinPoint.strokeA] != null ){
+            strokeStartsCache[joinPoint.strokeA] = strokeStarts[joinPoint.strokeA];
+            strokeStarts[joinPoint.strokeA] = null;
+        }
+        else{
+            crawlApply(joinPoint.strokeA, [], (indice, beforeIndice) => {
+                if(strokeStarts[indice] != null){
+                    strokeStartsCache[indice] = strokeStarts[indice];
+                    strokeStarts[indice] = null;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            })
+        }
+        joinPoints.push(joinPoint);
+    }
+}
+
+function hasStartPoint(strokeIndex){
+    if (strokeStarts[strokeIndex] != null) return true;
+    if (crawlApply(strokeIndex, [strokeIndex], (indice, beforeIndice) => {
+        if(strokeStarts[indice] != null){
+            return true;
+        }
+    })) return true;
+    return false;
+}
+
+function addStartPoint(startPointIndex, strokeIndex){
+    strokeStarts[strokeIndex] = startPointIndex;
+    crawlApply(strokeIndex, [strokeIndex], (indice, beforeIndice) => {
+        if(strokeStarts[indice] != null){
+            strokeStartsCache[indice] = strokeStarts[indice];
+            strokeStarts[indice] = null;
+        }
+        return false;
+    });
+}
+
+function crawlApply(thisIndice, visitedIndices, apply){
+    for(let joinPoint of joinPoints){
+        if(joinPoint.strokeA === thisIndice && !visitedIndices.includes(joinPoint.strokeB)){
+            visitedIndices.push(joinPoint.strokeB);
+            if(apply(joinPoint.strokeB, thisIndice)) return true;
+            if(crawlApply(joinPoint.strokeB, visitedIndices, apply)) return true;
+        }
+        else if(joinPoint.strokeB === thisIndice && !visitedIndices.includes(joinPoint.strokeA)){
+            visitedIndices.push(joinPoint.strokeA);
+            if(apply(joinPoint.strokeA, thisIndice)) return true;
+            if(crawlApply(joinPoint.strokeA, visitedIndices, apply)) return true;
+        }
+    }
+    return false;
+}
+
+
+function createStructRootsFromStrokes(strokes, strokeStarts, joinPoints){
     let strokeStructs = [];
 
     for(let i=0; i<strokes.length;i++){
-        let com = UTILS.calcCOMFromPoints(strokes[i]);
-        let stroke = strokes[i];
-        let start = startPointPosition[i];
-    
-        let strokeRoot = new TREE.Node(stroke[start], null, [], [], com);
-        let lastNode = strokeRoot;
-        let thisNode;
-    
-        for(let j=start-1; j>=0;j--){
-            thisNode = new TREE.Node(stroke[j], lastNode, [], [], com);
-            lastNode.descendants.push(thisNode);
-            lastNode = thisNode;
+        if(strokeStarts[i] != null){
+            let newStruct = createStructsFromStrokes(strokes, i, strokeStarts[i], joinPoints);
+            let com = newStruct.calculateCOM();
+            newStruct.distributeVariable("centerOfMass", [com[1]/com[0], com[2]/com[0]]);
+            strokeStructs.push(newStruct);
         }
-    
-        lastNode = strokeRoot;
-        for(let j=start+1; j<stroke.length; j++){
-            thisNode = new TREE.Node(stroke[j], lastNode, [], [], com);
-            lastNode.descendants.push(thisNode);
-            lastNode = thisNode;
-        }
-
-        strokeStructs.push(strokeRoot);
     }
 
     return strokeStructs;
 }
+
+function createStructsFromStrokes(strokes, strokeIndex, startPointPosition, joinPoints, direction = 0){ //Direction: 0 = both, 1 = left/down 2 = right/up
+        let com = 0;
+        let start = startPointPosition;
+        let stroke = strokes[strokeIndex];
+        let strokeRoot = new TREE.Node(stroke[start], null, [], []);
+
+        //All joins, that contain this stroke
+        let joinedPoints = joinPoints.filter(joinPoint => joinPoint.strokeA === strokeIndex || joinPoint.strokeB === strokeIndex);
+        //Indices of joins in this stroke
+        let joinedIndices = joinedPoints.map(jp => jp.strokeA === strokeIndex ? jp.pointAIndex : jp.pointBIndex);
+
+        //Filtering out all used joins for further recursion
+        joinPoints = joinPoints.filter(jp => joinedPoints.indexOf(jp) === -1);
+
+        //Creating a struct that contain the relevant Information
+        joinedPoints = joinedPoints.map(jp => {
+            if(jp.strokeA === strokeIndex){
+                return{ownPointIndex: jp.pointAIndex, otherStrokeIndex: jp.strokeB, otherPointIndex: jp.pointBIndex};
+            }
+            else{
+                return{ownPointIndex: jp.pointBIndex, otherStrokeIndex: jp.strokeA, otherPointIndex: jp.pointAIndex};
+            }
+        });
+
+
+        let lastNode = strokeRoot;
+        let thisNode;
+    
+        if(direction !== 2){
+            for(let i=start; i>=0;i--){
+                if(i!== start){
+                    thisNode = new TREE.Node(stroke[i], lastNode, [], [], com);
+                    lastNode.descendants.push(thisNode);
+                    lastNode = thisNode;
+                }
+                let joinPointIndex = joinedIndices.indexOf(i);
+                if(joinPointIndex !== -1){
+                    let descendantA = createStructsFromStrokes(strokes, joinedPoints[joinPointIndex].otherStrokeIndex, joinedPoints[joinPointIndex].otherPointIndex-1, joinPoints, 1);
+                    let descendantB = createStructsFromStrokes(strokes, joinedPoints[joinPointIndex].otherStrokeIndex, joinedPoints[joinPointIndex].otherPointIndex+1, joinPoints, 2);
+                    lastNode.descendants.push(descendantA);
+                    lastNode.descendants.push(descendantB);
+                }
+            }
+        }
+        if (direction !== 1){
+            lastNode = strokeRoot;
+            for(let i=start; i<stroke.length; i++){
+                if(i!== start){
+                    thisNode = new TREE.Node(stroke[i], lastNode, [], [], com);
+                    lastNode.descendants.push(thisNode);
+                    lastNode = thisNode;
+                }
+                let joinPointIndex = joinedIndices.indexOf(i);
+                if(joinPointIndex !== -1){
+                    let descendantA = createStructsFromStrokes(strokes, joinedPoints[joinPointIndex].otherStrokeIndex, joinedPoints[joinPointIndex].otherPointIndex-1, joinPoints, 1);
+                    let descendantB = createStructsFromStrokes(strokes, joinedPoints[joinPointIndex].otherStrokeIndex, joinedPoints[joinPointIndex].otherPointIndex+1, joinPoints, 2);
+                    lastNode.descendants.push(descendantA);
+                    lastNode.descendants.push(descendantB);
+                }
+            }
+        }
+
+        return strokeRoot;
+}
+
+
 
 function strokeTransformation(strokes){
     strokes = strokes.map(stroke => UTILS.transformStrokeToTuples(stroke));
     return strokes.map(stroke => UTILS.fillInDistantStrokePoints(stroke, TREE.TREE_CONFIG.sproutingLength)); 
 }
 
-function setStrokeStarts(strokes){
-    let strokeStarts = [];
-    for(let stroke of strokes){
-        strokeStarts.push(Math.floor(stroke.length/2));
-    }
-    return strokeStarts;
-}
-
-async function growStructs(getStructs, context, abordGrow, setAbordGrow, getPlay){
+async function growStructs(getStructs, context, abordGrow, setAbordGrow, getPlay, setPlay){
+    stopGrowButton.disabled = false;
     let oneStillGrowing = true;
+    setPlay(true);
     
     while(oneStillGrowing && !abordGrow()){
-        console.log("abordGrow: " + abordGrow());
-        console.log("play: " + getPlay());
         oneStillGrowing = false;
         const structs = getStructs();
 
@@ -368,15 +495,24 @@ async function growStructs(getStructs, context, abordGrow, setAbordGrow, getPlay
             forceFields.push(node.calculateForcePoints());
         }
 
-        /*for(let points of forceFields){
-            for(let point of points){
-                //Mal einen Kreis in Rot der Durchlässig ist und mit dem Radius von TREE_CONFIG.cripplingMinDist um die Kraftpunkte
+        if(debug == true){
+            for(let points of forceFields){
+                for(let point of points){
+                    //Mal einen Kreis in Rot der Durchlässig ist und mit dem Radius von TREE_CONFIG.crowdingMinDist um die Kraftpunkte
+                    context.beginPath();
+                    context.arc(point[0], point[1], TREE.TREE_CONFIG.crowdingMinDist, 0, 2 * Math.PI);
+                    context.fillStyle = "rgba(255, 0, 0, 0.5)";
+                    context.fill();
+                }
+            }
+
+            for(let node of structs){
                 context.beginPath();
-                context.arc(point[0], point[1], TREE.TREE_CONFIG.cripplingMinDist, 0, 2 * Math.PI);
-                context.fillStyle = "rgba(255, 0, 0, 0.5)";
+                context.arc(node.centerOfMass[0], node.centerOfMass[1], 15, 0, 2 * Math.PI);
+                context.fillStyle = "rgba(0, 255, 0, 0.5)";
                 context.fill();
             }
-        }*/
+        }
         
         for(let i = 0; i < structs.length; i++){
             const otherForceFields = [];
@@ -385,14 +521,9 @@ async function growStructs(getStructs, context, abordGrow, setAbordGrow, getPlay
                     otherForceFields.push(forceFields[j]);
                 }               
             }
-            structs[i].setForceFields(otherForceFields);
+            oneStillGrowing = structs[i].grow(otherForceFields) || oneStillGrowing;
+            structs[i].draw(context);
         }
-        
-        for(let node of structs){   
-            oneStillGrowing = node.grow() || oneStillGrowing;
-            node.draw(context);
-        }
-        
 
         await nextFrame(getPlay, abordGrow);
     }
@@ -400,7 +531,10 @@ async function growStructs(getStructs, context, abordGrow, setAbordGrow, getPlay
     setAbordGrow(false);
     setPlay(false);
 
-    canvasContext.strokeStyle="#8E977D";
+    stopGrowButton.disabled = true;
+
+    canvasContext.strokeStyle="black";
+    
 }
 
 function drawStructs(strokes, structs, context){
@@ -414,12 +548,14 @@ function drawEditMode(context, strokes, strokeStarts){
     redrawStrokes(canvas.trace, context);
     for(let i = 0; i < strokeStarts.length; i++){
         const strokeStart = strokeStarts[i];
-        context.beginPath();
-        context.arc(strokes[i][strokeStart][0], strokes[i][strokeStart][1], 5, 0, 2 * Math.PI);
-        context.fillStyle = "rgba(255, 0, 0, 0.5)";
-        context.fill();
+        if(strokeStart){
+            context.beginPath();
+            context.arc(strokes[i][strokeStart][0], strokes[i][strokeStart][1], 5, 0, 2 * Math.PI);
+            context.fillStyle = "rgba(255, 0, 0, 0.5)";
+            context.fill();
+        }
     }
-    for(let joinPoint of usedJoinPoints){
+    for(let joinPoint of joinPoints){
         context.beginPath();
         context.arc(joinPoint.intersection[0], joinPoint.intersection[1], 5, 0, 2 * Math.PI);
         context.fillStyle = "rgba(0, 0, 255, 0.5)";
@@ -456,4 +592,12 @@ function redrawStrokes(strokes, context){
         }
         context.stroke();
     }
+}
+
+function downloadCanvasAsImage(){
+    const link = document.createElement('a');
+    link.href = pureCanvas.toDataURL('image/png');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+    link.download = `canvas_${timestamp}.png`;
+    link.click();
 }
