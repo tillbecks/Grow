@@ -1,9 +1,9 @@
-import { TREE_CONFIG } from "./tree.js";
+import TCPRESETS from "./treeConfigPresets.js";
 
 function bindSliderToConfig(sliderId, valueId, configKey, conversionFunc = x=>x){
     document.getElementById(sliderId).addEventListener("input", (event)=>{
         document.getElementById(valueId).textContent = event.target.value;
-        TREE_CONFIG[configKey] = conversionFunc(parseFloat(event.target.value));
+        TCPRESETS[configKey] = conversionFunc(parseFloat(event.target.value));
     });
 }
 
@@ -51,11 +51,38 @@ function bindButtonToSlider(buttonId, sliderId, increment=1){
     button.addEventListener('touchcancel', stopHold);
 }
 
+function bindSynchronizer(checkboxId, mainId, secondaryId){
+    const checkbox = document.getElementById(checkboxId);
+    const mainElement = document.getElementById(mainId);
+    const secondaryElement = document.getElementById(secondaryId);
+
+    checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+            secondaryElement.value = mainElement.value;
+            secondaryElement.dispatchEvent(new Event('input'));
+        }
+    });
+
+    mainElement.addEventListener('input', () => {
+        if (checkbox.checked && mainElement.value !== secondaryElement.value) {
+            secondaryElement.value = mainElement.value;
+            secondaryElement.dispatchEvent(new Event('input'));
+        }
+    });
+
+    secondaryElement.addEventListener('input', () => {
+        if (checkbox.checked && mainElement.value !== secondaryElement.value) {
+            mainElement.value = secondaryElement.value;
+            mainElement.dispatchEvent(new Event('input'));
+        }
+    });
+}
+
 bindSliderToConfig('initThicknessSlider', 'initThicknessValue', 'initThickness');
 bindSliderToConfig('growthRateSlider', 'growthRateValue', 'growRate');
 bindSliderToConfig('maxThicknessSlider', 'maxThicknessValue', 'maxThickness');
 bindSliderToConfig('maxAgeSlider', 'maxAgeValue', 'maxAge');
-bindSliderToConfig('sproutingRateSlider', 'sproutingRateValue', 'sproutingRate');
+bindSliderToConfig('sproutingRateSlider', 'sproutingRateValue', 'secondarySproutingRate');
 bindSliderToConfig('sproutingLengthSlider', 'sproutingLengthValue', 'sproutingLength');
 bindSliderToConfig('sproutingGrowProbSlider', 'sproutingGrowProbValue', 'sproutingGrowProb');
 bindSliderToConfig('influenceVectorSlider', 'influenceVectorValue', 'influenceVectorInfluence');
@@ -66,6 +93,7 @@ bindSliderToConfig('crowdingMinDistSlider', 'crowdingMinDistValue', 'crowdingMin
 bindSliderToConfig('crowdingFactorSlider', 'crowdingFactorValue', 'crowdingFactor');
 bindSliderToConfig('minSproutingAgeSlider', 'minSproutingAgeValue', 'minSproutingAge');
 bindSliderToConfig('standardSproutAngleSlider', 'standardSproutAngleValue', 'standardSproutAngle', x=>x*Math.PI/180);
+bindSliderToConfig('mainSproutingRateSlider', 'mainSproutingRateValue', 'mainSproutingRate');
 
 bindButtonToSlider('initThicknessDecrButton', 'initThicknessSlider', -1);
 bindButtonToSlider('initThicknessIncrButton', 'initThicknessSlider', 1);
@@ -97,3 +125,8 @@ bindButtonToSlider('minSproutingAgeDecrButton', 'minSproutingAgeSlider', -1);
 bindButtonToSlider('minSproutingAgeIncrButton', 'minSproutingAgeSlider', 1);
 bindButtonToSlider('standardSproutAngleDecrButton', 'standardSproutAngleSlider', -1);
 bindButtonToSlider('standardSproutAngleIncrButton', 'standardSproutAngleSlider', 1);
+bindButtonToSlider('mainSproutingRateDecrButton', 'mainSproutingRateSlider', -1);
+bindButtonToSlider('mainSproutingRateIncrButton', 'mainSproutingRateSlider', 1);
+
+
+bindSynchronizer('syncSproutingRateCheck', 'mainSproutingRateSlider', 'sproutingRateSlider');

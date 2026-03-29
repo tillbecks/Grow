@@ -53,6 +53,11 @@ export function fillInDistantStrokePoints(stroke, dist){
     return stroke;
 }
 
+export function strokePreprocessing(strokes, strokeLength){
+    strokes = strokes.map(stroke => transformStrokeToTuples(stroke));
+    return strokes.map(stroke => fillInDistantStrokePoints(stroke, strokeLength)); 
+}
+
 export function calcCOMFromPoints(points){
     let centerOfMass = [0,0];
     for(let point of points){

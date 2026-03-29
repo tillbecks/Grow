@@ -3,11 +3,12 @@
     <head>
         <title>Growth Project</title>
         <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="icon" type="image/x-icon" href="./assets/img/icon.png">
     </head>
     <body>
         <div style="height: 100%; width: min(2000px, 100%); display:flex; flex-direction: column; gap: 20px; padding: 20px; min-height: 0;">
             <div style="flex: 0 2 20%; display:flex; justify-content: center; align-items: center; overflow: hidden; min-height: 0;">
-                <img src="assets/img/GrowLogo.png" alt="Grow Logo" style="max-height: 100%; min-height: 0;">
+                <img id="growLogo" src="assets/img/GrowLogo.png" alt="Grow Logo" style="max-height: 100%; min-height: 0; cursor: pointer;">
             </div>
             <div style="flex: 1 1 auto; min-height: 0; min-width: 0; max-width: 100%;display:flex; gap: 20px; align-items: center; justify-content: center;">
                 <div style="width: 100%; height: 100%; max-height: 820px; display:flex; gap: 20px; align-items: flex-start; border: 2px solid">
@@ -46,7 +47,7 @@
 
                                 <label for="growthRateSlider" class="slider-label" title="Click to get more information">Thickness Grow Rate</label>
                                 <input id="growthRateDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
-                                <input id="growthRateSlider" type = "range" min = "0.01" max = "1" value = "0.05" class = "slider" step = "0.01" autocomplete="off">
+                                <input id="growthRateSlider" type = "range" min = "0" max = "1" value = "0.05" class = "slider" step = "0.01" autocomplete="off">
                                 <input id="growthRateIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="growthRateValue" class="font-bold">0.05</span>
 
@@ -58,7 +59,7 @@
 
                                 <label for="maxAgeSlider" class="slider-label" title="Click to get more information">Maximum Age</label>
                                 <input id="maxAgeDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
-                                <input id="maxAgeSlider" type = "range" min = "10" max = "1000" value = "150" class = "slider" step = "1" autocomplete="off">
+                                <input id="maxAgeSlider" type = "range" min = "1" max = "1000" value = "150" class = "slider" step = "1" autocomplete="off">
                                 <input id="maxAgeIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="maxAgeValue" class="font-bold">150</span>
                             </div>
@@ -77,7 +78,19 @@
                                 <input id="sproutingGrowProbIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="sproutingGrowProbValue" class="font-bold">0.2</span>
 
-                                <label for="sproutingRateSlider" class="slider-label" title="Click to get more information">Lateral Sprouting Probability</label>
+                                <label for="syncSproutingRateCheck" class="slider-label" title="Click to get more information">Synchronize Lateral Sprouting Probabilities</label>
+                                <input id="syncSproutingRateCheck" type ="checkbox" autocomplete="off" value="syncSr" checked="true">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+
+                                <label for="mainSproutingRateSlider" class="slider-label" title="Click to get more information">Lateral Main Sprouting Probability</label>
+                                <input id="mainSproutingRateDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
+                                <input id="mainSproutingRateSlider" type = "range" min = "0" max = "0.05" value = "0.002" class = "slider" step = "0.0001" autocomplete="off">
+                                <input id="mainSproutingRateIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
+                                <span id="mainSproutingRateValue" class="font-bold">0.002</span>
+
+                                <label for="sproutingRateSlider" class="slider-label" title="Click to get more information">Lateral Secondary Sprouting Probability</label>
                                 <input id="sproutingRateDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="sproutingRateSlider" type = "range" min = "0" max = "0.05" value = "0.002" class = "slider" step = "0.0001" autocomplete="off">
                                 <input id="sproutingRateIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
@@ -142,9 +155,17 @@
                         
                 </div>
             </div>
-            <div style="flex: 0 1 20%; display:flex; justify-content: center; align-items: center; overflow: hidden; min-height: 0;">
-                <div style="border: 2px solid white; padding: 10px; height: 100%; max-height: 100%; min-height: 0; overflow: auto; width: 100%; ">
-                    HIER STEHT EIN TEST TETETETETETTE 
+            <div style="flex: 0 0 auto; max-height: 20%; display:flex; justify-content: center; align-items: center; overflow: hidden; min-height: 0; color: white; width: 100%;">
+                <div style="border: 2px solid white; padding: 10px; height: auto; max-height: 100%; min-height: 0; overflow: auto; width: 100%; position:relative;">
+                    <input id="infoBoxHideButton" type="button" value="hide InfoBox" autocomplete="off" class="button" style="position: absolute; top: 10px; right: 10px; z-index: 1;">
+                    <div id="infoBoxContent" style="display:flex; flex-direction: column; gap: 10px; justify-content: flex-start; align-items: center; width: 100%; height: fit-content; min-height: 0; max-height: 100%;">
+                        <h1 id = "infoBoxTitle" style="font-size: 1.5em; text-align: left; width: 100%;">Information</h1>
+                        <div id="infoBox" style="display:flex; gap: 10px; width: 100%; align-items: flex-start;">
+                            <p id="infoBoxText" style="font-size: 1.2em; font-weight: bold; flex: 1 1 auto;">Click on the logo or any label to get more information on it.</p>
+                            <div id="infoBoxImageContainer" style="display:flex; flex-direction: column; gap: 10px; justify-content: center; align-items: center; flex: 0 0 10%; height: fit-content; min-width: 0;">
+                            </div>
+                        </div>
+                    </div>
                 </div>                
             </div>
         </div>
@@ -153,6 +174,7 @@
         <script type="text/javascript" src="assets/js/libs/handwriting.js/handwriting.canvas.js"></script>
         <script type="module" src="assets/js/main.js"></script>
         <script type="module" src="assets/js/sliderUpdates.js"></script>
+        <script type="module" src="assets/js/infoBox.js"></script>
 
     </body>
 </html>
