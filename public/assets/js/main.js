@@ -1,13 +1,11 @@
-import * as TREE from "./tree.js";
 import * as UTILS from "./utils.js";
 import * as GROWING from "./growing.js";
-import * as structBuilder from "./structBuilder.js";
-import * as canvasDrawing from "./canvasDrawing.js";
-import * as editMode from "./editMode.js";
-import State from "./state.js";
+import * as SB from "./structBuilder.js";
+import * as CD from "./canvasDrawing.js";
+import * as EDITMODE from "./editMode.js";
+import state from "./state.js";
 
 const debug = false;
-const state = new State();
 
 let actionQueue = Promise.resolve();
 
@@ -19,7 +17,7 @@ state.dom.buttons.resetButton.addEventListener("click", ()=>{enqueueAction(total
 state.dom.buttons.growButton.addEventListener("click", ()=>{enqueueAction(grow);});
 state.dom.buttons.resetGrow.addEventListener("click", ()=>{enqueueAction(growReset);});
 state.dom.buttons.stopGrow.addEventListener("click", ()=>{state.setPlay();});
-state.dom.buttons.editMode.addEventListener("click", ()=>{editMode.setEditMode(state);});
+state.dom.buttons.editMode.addEventListener("click", ()=>{EDITMODE.setEditMode(state);});
 state.dom.buttons.startPoint.addEventListener("click", ()=>{state.setStartPointModus();});
 state.dom.buttons.joinPoint.addEventListener("click", ()=>{state.setJoinPointModus();});
 state.dom.buttons.download.addEventListener("click", downloadCanvasAsImage);
@@ -29,13 +27,13 @@ document.onmousedown = handleMouseDown;
 
 function handleMouseDown(event){
     if(state.editModeState.editMode){
-        editMode.handleMouseDown(event, state);
+        EDITMODE.handleMouseDown(event, state);
     }
 }
 
 function handleMouseMove(event){
     if(state.editModeState.editMode){
-        editMode.handleMouseMove(event, state);
+        EDITMODE.handleMouseMove(event, state);
     }
 }
 
@@ -47,7 +45,7 @@ async function totalReset(){
 
 async function growReset(){
     await GROWING.abordGrowing(state);
-    canvasDrawing.redrawStrokes(state.dom.canvas.trace, state.dom.canvasContext);
+    CD.redrawStrokes(state.dom.canvas.trace, state.dom.canvasContext);
     state.reset("grow");
 }
 
@@ -59,7 +57,7 @@ async function grow(){
         state.checkStrokeStarts();
     }
 
-    state.strokeState.structs = structBuilder.createStructRootsFromStrokes(state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.treeConfig);
+    state.strokeState.structs = SB.createStructRootsFromStrokes(state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.treeConfig);
      
     GROWING.growStructs(state, debug);
 }

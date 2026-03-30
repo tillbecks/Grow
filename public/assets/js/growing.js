@@ -1,4 +1,4 @@
-import * as canvasDrawing from "./canvasDrawing.js";
+import * as CD from "./canvasDrawing.js";
 
 export async function abordGrowing(state){
     if(state.growState.isGrowing){
@@ -18,7 +18,7 @@ export async function growStructs(state, debug){
         oneStillGrowing = false;
         const structs = state.strokeState.structs;
 
-        canvasDrawing.redrawStrokes(state.dom.canvas.trace, state.dom.canvasContext);
+        CD.redrawStrokes(state.dom.canvas.trace, state.dom.canvasContext);
 
         
         // Calculate forcefields for all nodes

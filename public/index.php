@@ -30,34 +30,43 @@
                         </div>
                     </div>
                     <div style="flex: 1 1 50%; max-width: 50%; width: fit-content; min-width: 0; min-height: 0; max-height: 100%; height: 100%; display:flex; flex-direction:column; gap: 20px; padding: 10px; ">
+                        <p style="text-decoration: underline; color: white; font-size: 1.5em;">Controls</p>
                         <div style="flex: 0 0 auto; display:grid; grid-template-columns: repeat(2, auto); gap: 20px; justify-content: flex-start; padding: 10px; box-sizing: border-box; ">
                             <input id="resetButton" type="button" value="Reset" autocomplete="off" class="button">
                             <input id="growButton" type="button" value="Grow" autocomplete="off" class="button">
                             <input id="resetGrow" type="button" value="ResetGrow"  autocomplete="off" class="button">
                             <input id="stopGrow" type="button" value="▶" autocomplete="off" disabled="true" class="button">
                         </div>
-                        <div class="slider-container" style="flex: 1 1 auto; display:flex; flex-direction:column; gap: 20px; min-width: 0; min-height: 0; max-width: 100%; overflow-x: auto; overflow-y: auto; width: fit-content; padding: 10px; box-sizing: border-box; justify-items: flex-start;">
+                        <p style="text-decoration: underline; color: white; font-size: 1.5em;">Presets</p>
+                        <div style="flex: 0 0 auto; display:grid; grid-template-columns: repeat(2, auto); gap: 20px; justify-content: flex-start; padding: 10px; box-sizing: border-box; ">
+                            <select name="treeConfig" id="presetSelector">
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                            <input id="loadPreset" type="button" value="Load Preset" autocomplete="off" class="button">
+                        </div>
+                        <p id="advancedSettingsToggle" style="text-decoration: underline; color: white; font-size: 1.5em; cursor: pointer;">Advanced Settings <span style="text-decoration: none; display: inline;" id="settingsArrow">⌄</span></p>
+                        <div id="advancedSettingsContainer" class="slider-container" style="flex: 1 1 auto; display:none; flex-direction:column; gap: 20px; min-width: 0; min-height: 0; max-width: 100%; overflow-x: auto; overflow-y: auto; width: fit-content; padding: 10px; box-sizing: border-box; justify-items: flex-start;">
                             <h1 style="font-size: 1.5em;">Basic-Settings</h1>
-                            <div style="display:grid; grid-template-columns: repeat(5, auto); gap: 20px; justify-content: flex-start; width: 100%;">
-                                <label for="initThicknessSlider" class="slider-label" title="Click to get more information">Initial Thickness</label>
+                            <div style="display:grid; grid-template-columns: repeat(5, auto); gap: 20px; justify-content: flex-start; align-items: center; width: 100%;">
+                                <p class="slider-label" title="Click to get more information">Initial Thickness</p>
                                 <input id="initThicknessDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="initThicknessSlider" type = "range" min = "1" max = "10" value = "1" class = "slider" step = "1" autocomplete="off">
                                 <input id="initThicknessIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="initThicknessValue" class="font-bold">1</span>
 
-                                <label for="growthRateSlider" class="slider-label" title="Click to get more information">Thickness Grow Rate</label>
+                                <p class="slider-label" title="Click to get more information">Thickness Grow Rate</p>
                                 <input id="growthRateDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="growthRateSlider" type = "range" min = "0" max = "1" value = "0.05" class = "slider" step = "0.01" autocomplete="off">
                                 <input id="growthRateIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="growthRateValue" class="font-bold">0.05</span>
 
-                                <label for="maxThicknessSlider" class="slider-label" title="Click to get more information">Maximum Thickness</label>
+                                <p class="slider-label" title="Click to get more information">Maximum Thickness</p>
                                 <input id="maxThicknessDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="maxThicknessSlider" type = "range" min = "1" max = "30" value = "5" class = "slider" step = "1" autocomplete="off">
                                 <input id="maxThicknessIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="maxThicknessValue" class="font-bold">5</span>
 
-                                <label for="maxAgeSlider" class="slider-label" title="Click to get more information">Maximum Age</label>
+                                <p class="slider-label" title="Click to get more information">Maximum Age</p>
                                 <input id="maxAgeDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="maxAgeSlider" type = "range" min = "1" max = "1000" value = "150" class = "slider" step = "1" autocomplete="off">
                                 <input id="maxAgeIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
@@ -66,43 +75,43 @@
                             
                             <h1 style="font-size: 1.5em;">Sprouting-Settings</h1>
                             <div style="display:grid; grid-template-columns: repeat(5, auto); gap: 20px; justify-content: flex-start; width: 100%;">
-                                <label for="minSproutingAgeSlider" class="slider-label" title="Click to get more information">Minimum Sprouting Age</label>
+                                <p class="slider-label" title="Click to get more information">Minimum Sprouting Age</p>
                                 <input id="minSproutingAgeDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="minSproutingAgeSlider" type = "range" min = "0" max = "1000" value = "25" class = "slider" step = "1" autocomplete="off">
                                 <input id="minSproutingAgeIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="minSproutingAgeValue" class="font-bold">25</span>
 
-                                <label for="sproutingGrowProbSlider" class="slider-label" title="Click to get more information">Tip Sprouting Probability</label>
+                                <p class="slider-label" title="Click to get more information">Tip Sprouting Probability</p>
                                 <input id="sproutingGrowProbDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="sproutingGrowProbSlider" type = "range" min = "0" max = "1" value = "0.2" class = "slider" step = "0.01" autocomplete="off">
                                 <input id="sproutingGrowProbIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="sproutingGrowProbValue" class="font-bold">0.2</span>
 
-                                <label for="syncSproutingRateCheck" class="slider-label" title="Click to get more information">Synchronize Lateral Sprouting Probabilities</label>
+                                <p class="slider-label" title="Click to get more information">Synchronize Lateral Sprouting Probabilities</p>
                                 <input id="syncSproutingRateCheck" type ="checkbox" autocomplete="off" value="syncSr" checked="true">
                                 <div></div>
                                 <div></div>
                                 <div></div>
 
-                                <label for="mainSproutingRateSlider" class="slider-label" title="Click to get more information">Lateral Main Sprouting Probability</label>
+                                <p class="slider-label" title="Click to get more information">Lateral Main Sprouting Probability</p>
                                 <input id="mainSproutingRateDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="mainSproutingRateSlider" type = "range" min = "0" max = "0.05" value = "0.002" class = "slider" step = "0.0001" autocomplete="off">
                                 <input id="mainSproutingRateIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="mainSproutingRateValue" class="font-bold">0.002</span>
 
-                                <label for="sproutingRateSlider" class="slider-label" title="Click to get more information">Lateral Secondary Sprouting Probability</label>
+                                <p class="slider-label" title="Click to get more information">Lateral Secondary Sprouting Probability</p>
                                 <input id="sproutingRateDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="sproutingRateSlider" type = "range" min = "0" max = "0.05" value = "0.002" class = "slider" step = "0.0001" autocomplete="off">
                                 <input id="sproutingRateIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="sproutingRateValue" class="font-bold">0.002</span>
 
-                                <label for="sproutingLengthSlider" class="slider-label" title="Click to get more information">Sprout Length</label>
+                                <p class="slider-label" title="Click to get more information">Sprout Length</p>
                                 <input id="sproutingLengthDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="sproutingLengthSlider" type = "range" min = "1" max = "20" value = "5" class = "slider" step = "1" autocomplete="off">
                                 <input id="sproutingLengthIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="sproutingLengthValue" class="font-bold">5</span>
 
-                                <label for="breakingOffProbSlider" class="slider-label" title="Click to get more information">Breaking Off Probability</label>
+                                <p class="slider-label" title="Click to get more information">Breaking Off Probability</p>
                                 <input id="breakingOffProbDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="breakingOffProbSlider" type = "range" min = "0" max = "0.01" value = "0.0010" class = "slider" step = "0.0001" autocomplete="off">
                                 <input id="breakingOffProbIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
@@ -111,25 +120,25 @@
 
                             <h1 style="font-size: 1.5em;">Sprouting-Direction-Settings</h1>
                             <div style="display:grid; grid-template-columns: repeat(5, auto); gap: 20px; justify-content: flex-start; width: 100%;">
-                                <label for="standardSproutAngleSlider" class="slider-label" title="Click to get more information">Standard Lateral Sprouting Angle</label>
+                                <p class="slider-label" title="Click to get more information">Standard Lateral Sprouting Angle</p>
                                 <input id="standardSproutAngleDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="standardSproutAngleSlider" type = "range" min = "0" max = "180" value = "90" class = "slider" step = "1" autocomplete="off">
                                 <input id="standardSproutAngleIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="standardSproutAngleValue" class="font-bold">90</span>
 
-                                <label for="maxRandomRotationTipSlider" class="slider-label" title="Click to get more information">Maximum Random Angle Offset</label>
+                                <p class="slider-label" title="Click to get more information">Maximum Random Angle Offset</p>
                                 <input id="maxRandomRotationTipDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="maxRandomRotationTipSlider" type = "range" min = "0" max = "90" value = "18" class = "slider" step = "1" autocomplete="off">
                                 <input id="maxRandomRotationTipIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="maxRandomRotationTipValue" class="font-bold">18</span>
 
-                                <label for="awayFromCOMInfluenceSlider" class="slider-label" title="Click to get more information">Away From COM Influence</label>
+                                <p class="slider-label" title="Click to get more information">Away From COM Influence</p>
                                 <input id="awayFromCOMInfluenceDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="awayFromCOMInfluenceSlider" type = "range" min = "0" max = "2" value = "0.5" class = "slider" step = "0.01" autocomplete="off">
                                 <input id="awayFromCOMInfluenceIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="awayFromCOMInfluenceValue" class="font-bold">0.5</span>
 
-                                <label for="influenceVectorSlider" class="slider-label" title="Click to get more information">Ancestor Direction Influence</label>
+                                <p class="slider-label" title="Click to get more information">Ancestor Direction Influence</p>
                                 <input id="influenceVectorDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="influenceVectorSlider" type = "range" min = "0" max = "2" value = "0" class = "slider" step = "0.01" autocomplete="off">
                                 <input id="influenceVectorIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
@@ -138,13 +147,13 @@
 
                             <h1 style="font-size: 1.5em;">Extra-Settings</h1>
                             <div style="display:grid; grid-template-columns: repeat(5, auto); gap: 20px; justify-content: flex-start; width: 100%;">
-                                <label for="crowdingMinDistSlider" class="slider-label" title="Click to get more information">Crowding Minimum Distance</label>
+                                <p class="slider-label" title="Click to get more information">Crowding Minimum Distance</p>
                                 <input id="crowdingMinDistDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="crowdingMinDistSlider" type = "range" min = "0" max = "200" value = "30" class = "slider" step = "1" autocomplete="off">
                                 <input id="crowdingMinDistIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
                                 <span id="crowdingMinDistValue" class="font-bold">30</span>
 
-                                <label for="crowdingFactorSlider" class="slider-label" title="Click to get more information">Crowding Factor</label>
+                                <p class="slider-label" title="Click to get more information">Crowding Factor</p>
                                 <input id="crowdingFactorDecrButton" type="button" class="button font-bold" value="🢐" autocomplete="off">
                                 <input id="crowdingFactorSlider" type = "range" min = "0" max = "1" value = "0.9" class = "slider" step = "0.01" autocomplete="off">
                                 <input id="crowdingFactorIncrButton" type="button" class="button font-bold" value="🢒" autocomplete="off">
@@ -175,6 +184,8 @@
         <script type="module" src="assets/js/main.js"></script>
         <script type="module" src="assets/js/sliderUpdates.js"></script>
         <script type="module" src="assets/js/infoBox.js"></script>
+        <script type="module" src="assets/js/presetLoader.js"></script>
+        <script type="module" src="assets/js/toggleAdvancedSettings.js"></script>
 
     </body>
 </html>

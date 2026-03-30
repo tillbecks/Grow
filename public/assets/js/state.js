@@ -1,8 +1,7 @@
 import * as POINTACTIONS from "./joinStartPointActions.js";
-import TCPRESETS from "./treeConfigPresets.js";
+import * as TCPRESETS from "./treeConfigPresets.js";
 
-
-export default class State{
+class State{
     constructor(){
         this.strokeState = {
             strokes : [],
@@ -30,7 +29,7 @@ export default class State{
         this.dom = null;
         this.initDom();
 
-        this.treeConfig = TCPRESETS;
+        this.treeConfig = structuredClone(TCPRESETS.treeConfigs[TCPRESETS.defaultTreeConfigIndex]);
     }
 
     initDom(){
@@ -52,7 +51,7 @@ export default class State{
         };
     }
 
-    setEditMode(mode=!this.editModeState.editMode){
+    setEditMode(mode){
         if(mode){
             this.editModeState.editMode = true;
         }
@@ -70,7 +69,6 @@ export default class State{
         this.growState.play = value;
         this.dom.buttons.stopGrow.value = !this.growState.play ? "▶" : "⏸";
     }
-
 
     setStartPointModus(){
         if(!this.editModeState.startPointMode){
@@ -136,28 +134,29 @@ export default class State{
         }
     }
 
-    reset(level="canvas"){
+    reset(level = "canvas") {
+        const resetCore = () => {
+            const newState = new State();
+            this.strokeState = newState.strokeState;
+            this.growState = newState.growState;
+            this.editModeState = newState.editModeState;
+            this.dom.canvas.erase();
+        };
+    
         const resets = {
             "all": () => {
-                const newState = new State();
-                this.strokeState = newState.strokeState;
-                this.growState = newState.growState;
-                this.editModeState = newState.editModeState;
-                this.treeConfig = TCPRESETS;
-                this.dom.canvas.erase();
+                resetCore();
+                this.treeConfig = TCPRESETS.treeConfigs[TCPRESETS.defaultTreeConfigIndex];
             },
-            "canvas": () => {
-                const newState = new State();
-                this.strokeState = newState.strokeState;
-                this.growState = newState.growState;
-                this.editModeState = newState.editModeState;
-                this.dom.canvas.erase();
-            },
+            "canvas": () => resetCore(),
             "grow": () => {
                 this.strokeState.structs = [];
             }
-        }
-
-        resets[level]();
+        };
+    
+        resets[level]?.();
     }
+    
 }
+
+export default new State();

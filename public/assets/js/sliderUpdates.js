@@ -1,9 +1,34 @@
-import TCPRESETS from "./treeConfigPresets.js";
+import state from "./state.js";
+
+// Mapping zwischen Config-Keys und Slider-IDs
+const SLIDER_MAPPING = {
+    'initThickness': 'initThicknessSlider',
+    'growRate': 'growthRateSlider',
+    'maxThickness': 'maxThicknessSlider',
+    'maxAge': 'maxAgeSlider',
+    'secondarySproutingRate': 'sproutingRateSlider',
+    'sproutingLength': 'sproutingLengthSlider',
+    'sproutingGrowProb': 'sproutingGrowProbSlider',
+    'influenceVectorInfluence': 'influenceVectorSlider',
+    'maxRandomRotationTip': 'maxRandomRotationTipSlider',
+    'breakingOffProb': 'breakingOffProbSlider',
+    'awayFromCOMInfluence': 'awayFromCOMInfluenceSlider',
+    'crowdingMinDist': 'crowdingMinDistSlider',
+    'crowdingFactor': 'crowdingFactorSlider',
+    'minSproutingAge': 'minSproutingAgeSlider',
+    'standardSproutAngle': 'standardSproutAngleSlider',
+    'mainSproutingRate': 'mainSproutingRateSlider',
+};
+
+const inverseFunctions = {
+    'maxRandomRotationTip': x => x * 180 / Math.PI,
+    'standardSproutAngle': x => x * 180 / Math.PI,
+};
 
 function bindSliderToConfig(sliderId, valueId, configKey, conversionFunc = x=>x){
     document.getElementById(sliderId).addEventListener("input", (event)=>{
         document.getElementById(valueId).textContent = event.target.value;
-        TCPRESETS[configKey] = conversionFunc(parseFloat(event.target.value));
+        state.treeConfig[configKey] = conversionFunc(parseFloat(event.target.value));
     });
 }
 
@@ -77,6 +102,24 @@ function bindSynchronizer(checkboxId, mainId, secondaryId){
         }
     });
 }
+
+export function updateSlidersFromConfig(config){
+    for(let configKey in SLIDER_MAPPING){
+        const sliderId = SLIDER_MAPPING[configKey];
+        if(Object.hasOwn(config, configKey)){
+            const slider = document.getElementById(sliderId);
+            let value = config[configKey];
+
+            if(inverseFunctions[configKey]){
+                value = inverseFunctions[configKey](value);
+            }
+
+            slider.value = value;
+            slider.dispatchEvent(new Event('input'));
+        }
+    }
+}
+
 
 bindSliderToConfig('initThicknessSlider', 'initThicknessValue', 'initThickness');
 bindSliderToConfig('growthRateSlider', 'growthRateValue', 'growRate');
