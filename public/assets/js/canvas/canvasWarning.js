@@ -1,3 +1,5 @@
+import { WARNINGDISPLAYTIME } from "../config/appConfig.js";
+
 export default function spawnWarning(warningMessage){
     const canvasSection = document.getElementById("canvasSection");
 
@@ -9,5 +11,5 @@ export default function spawnWarning(warningMessage){
 
     setTimeout(() => {
         warningBox.classList.add('fade-out');
-    }, 3000);
+    }, WARNINGDISPLAYTIME);
 }

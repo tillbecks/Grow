@@ -1,14 +1,16 @@
+@use '../abstracts' as *;
+
 .warningBox{
-    max-width: 100px; 
+    max-width: 200px; 
     height: auto; 
     width: auto; 
     position: absolute; 
-    top: 15px; right: 15px; 
-    background-color: white; 
-    color: red; 
-    border: 2px dotted rgb(161, 161, 161); 
-    border-radius: 5px; 
-    padding: 5px; 
+    top: $padding * 2; left: $padding * 2; 
+    background-color: $primary-color; 
+    color: $warning-color; 
+    border: 2px solid $secondary-color; 
+    border-radius: 2px; 
+    padding: $padding; 
     z-index: 1000;
     font-size: 14px;
     font-weight: bold;

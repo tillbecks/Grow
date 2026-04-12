@@ -1,9 +1,14 @@
 @use '../abstracts' as *;
+@use '../layout/flexbox' as *;
 
 .slider-container{
+    @extend .flex-column;
+    @extend .justify-start;
+    @extend .items-start;
+
     color: #ffffff;
     font-size: 13px;
-    overflow: auto;
+    overflow: auto; 
     
     .button{
         background: transparent;
@@ -65,4 +70,16 @@
     &::-moz-range-thumb {
         background: #707070;
     }
+}
+
+#advancedSettingsToggle{
+    @extend .flex-row;
+    @extend .items-start;
+    padding: 0;
+    gap: $inline-block-gap;
+}
+
+#advancedSettingsToggle h1 {
+    display: inline-block;
+    margin: 0;
 }

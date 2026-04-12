@@ -1,4 +1,4 @@
-import { INFORMATIONCONTENT } from "./config/infoContentConfig.js";
+import {IMAGEPOSITION, INFORMATIONCONTENT } from "../config/infoContentConfig.js";
 
 export function bindObjectToInfoBox(objectId, contentObjectKey){
     const element = document.getElementById(objectId);
@@ -11,14 +11,21 @@ export function bindObjectToInfoBox(objectId, contentObjectKey){
 }
 
 function setInfoBoxContent(contentObject){
+    const infoBox = document.getElementById("infoBox");
     const title = document.getElementById("infoBoxTitle");
     const text = document.getElementById("infoBoxText");
     const imageContainer = document.getElementById("infoBoxImageContainer");
 
     title.textContent = contentObject.title;
     text.textContent = contentObject.text;
+
+    imageContainer.classList.toggle("gallery", contentObject.imagePosition === IMAGEPOSITION.GALERY);
+    infoBox.classList.toggle("gallery", contentObject.imagePosition === IMAGEPOSITION.GALERY);
     
-    imageContainer.innerHTML = "";
+    while(imageContainer.firstChild){
+        imageContainer.removeChild(imageContainer.firstChild);
+    }
+
     for(const image of contentObject.images){
         imageContainer.appendChild(createImageDescription(image.src, image.alt, image.description));
     }
@@ -26,16 +33,16 @@ function setInfoBoxContent(contentObject){
 
 function createImageDescription(src, alt="", description){
     const container = document.createElement("div");
-    container.style = "image-desription-container"
+    container.classList.add("image-description-container");
 
     const img = document.createElement("img");
     img.src = src;
     img.alt = alt;
-    img.style = "info-img";
+    img.classList.add("info-img");
 
     const desc = document.createElement("p");
     desc.textContent = description;
-    desc.style = "img-desc";
+    desc.classList.add("img-desc");
 
     container.appendChild(img);
     container.appendChild(desc);

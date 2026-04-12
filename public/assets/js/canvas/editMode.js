@@ -1,5 +1,5 @@
 import * as JSPA from "../tree/joinStartPointActions.js";
-import * as canvasDrawing from "./canvasDrawing.js";
+import * as CANVASDRAWING from "./canvasDrawing.js";
 import * as UTILS from "../config/utils.js";
 import * as AGECOUNTER from "../ui/ageCounter.js";
 
@@ -11,12 +11,11 @@ export function setEditMode(state){
             state.strokeState.strokes = UTILS.strokePreprocessing(state.dom.canvas.getTrace(), state.treeConfig.sproutingLength);
             state.checkStrokeStarts();
         }
-        state.dom.buttons.startPoint.style.visibility = "visible";
-        state.dom.buttons.joinPoint.style.visibility = "visible";
-        state.dom.pureCanvas.style.cursor = "not-allowed";
+
+        state.dom.pureCanvas.classList.add("not-allowed-cursor");
         state.dom.buttons.editMode.value = "Exit Edit Mode"; 
 
-        canvasDrawing.drawEditMode(state.dom.canvasContext, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.dom.canvas.trace);
+        CANVASDRAWING.drawEditMode(state.dom.canvasContext, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.dom.canvas.trace);
         state.dom.buttons.resetButton.disabled = true;
         state.dom.buttons.growButton.disabled = true;
         state.dom.buttons.resetGrow.disabled = true;
@@ -28,15 +27,13 @@ export function setEditMode(state){
 
     else{
         state.setEditMode(false);
-        state.dom.buttons.startPoint.style.visibility = "hidden";
-        state.dom.buttons.joinPoint.style.visibility = "hidden";
-        state.dom.pureCanvas.style.cursor = "crosshair";
+        state.dom.pureCanvas.classList.remove("not-allowed-cursor");
         state.dom.buttons.editMode.value = "Edit Mode"; 
 
 
         state.dom.canvas.activate();
 
-        canvasDrawing.drawStructs(state.dom.canvas.trace, state.strokeState.structs, state.dom.canvasContext);
+        CANVASDRAWING.drawStructs(state.dom.canvas.trace, state.strokeState.structs, state.dom.canvasContext);
         
         state.dom.buttons.resetButton.disabled = false;
         state.dom.buttons.growButton.disabled = false;
@@ -72,7 +69,7 @@ function mouseMoveStartPoint(event, state){
                 }
             }
         }
-        state.dom.pureCanvas.style.cursor = onStruct ? "crosshair" : "not-allowed";
+        state.dom.pureCanvas.classList.toggle("not-allowed-cursor", !onStruct);
         state.editModeState.thisStartPoint = newStartPoint;
     }
 }
@@ -89,7 +86,7 @@ function mouseMoveJoinPoint(event, state){
                 break;
             }
         }
-        state.dom.pureCanvas.style.cursor = onJoinPoint ? "crosshair" : "not-allowed";
+        state.dom.pureCanvas.classList.toggle("not-allowed-cursor", !onJoinPoint);
         state.editModeState.thisJoinPoint = newJoinPoint;
     }
 }
@@ -106,7 +103,7 @@ export function handleMouseDown(event, state) {
 function mouseDownStartPoint(state){
     if(state.editModeState.startPointMode && state.editModeState.thisStartPoint){
         JSPA.addStartPoint(state.strokeState.joinPoints, state.strokeState.strokeStarts, state.strokeState.strokeStartsCache, state.editModeState.thisStartPoint.pointIndex, state.editModeState.thisStartPoint.strokeIndex);
-        canvasDrawing.drawEditMode(state.dom.canvasContext, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.dom.canvas.trace);
+        CANVASDRAWING.drawEditMode(state.dom.canvasContext, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.dom.canvas.trace);
     }
 }
 
@@ -120,6 +117,6 @@ function mouseDownJoinPoint(state){
             JSPA.removeJoinPoint(state.strokeState.joinPoints, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.strokeStartsCache, state.editModeState.thisJoinPoint);
             state.checkStrokeStarts();
         }
-        canvasDrawing.drawEditMode(state.dom.canvasContext, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.dom.canvas.trace);
+        CANVASDRAWING.drawEditMode(state.dom.canvasContext, state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.dom.canvas.trace);
     }
 }

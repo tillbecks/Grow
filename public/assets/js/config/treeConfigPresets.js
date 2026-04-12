@@ -6,7 +6,7 @@ const defaultConfig = {
     initThickness: 1,
     growRate: 0.05,
     maxThickness: 5,
-    maxAge: 175,
+    maxAge: 150,
 
     mainSproutingRate: 0.002,
     secondarySproutingRate: 0.002,

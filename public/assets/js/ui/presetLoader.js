@@ -25,3 +25,7 @@ function loadPreset(presetIndex){
     sliderUpdates.updateSlidersFromConfig(config);
 }
 
+export function loadDefaultPreset(){
+    loadPreset(TCPRESETS.defaultTreeConfigIndex);
+}
+

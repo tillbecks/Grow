@@ -3,28 +3,21 @@ import * as GROWING from "./tree/growing.js";
 import * as SB from "./tree/structBuilder.js";
 import * as CD from "./canvas/canvasDrawing.js";
 import * as EDITMODE from "./canvas/editMode.js";
-import state from "./state/state.js";
 import * as AGECOUNTER from "./ui/ageCounter.js";
 import * as SLIDERFACTORY from "./ui/sliderFactory.js";
-import * as INFOBOX from "./infoBox.js";
+import * as INFOBOX from "./ui/infoBox.js";
 import * as PRESETLOADER from "./ui/presetLoader.js";
 import * as TOGGLEADVANCEDSETTINGS from "./ui/toggleAdvancedSettings.js";
-
-/*
-        <script type="module" src="assets/js/toggleAdvancedSettings.js"></script> */
+import * as APPCONFIG from "./config/appConfig.js";
+import { initialDrawingData } from "./config/initDrawingData.js";
+import state from "./state/state.js";
 
 SLIDERFACTORY.createSliderSection();
 INFOBOX.addBindingsToInfoBox();
 PRESETLOADER.configurePresetSelector();
+PRESETLOADER.loadDefaultPreset();
 TOGGLEADVANCEDSETTINGS.init();
-
-
-//evtl. load standard Preset am Anfang updateSlidersFromConfig
-
-
-AGECOUNTER.spawnWarning();
-
-const debug = false;
+AGECOUNTER.spawnCounter(state.treeConfig.maxAge);
 
 let actionQueue = Promise.resolve();
 
@@ -44,6 +37,11 @@ state.dom.buttons.download.addEventListener("click", downloadCanvasAsImage);
 document.onmousemove = handleMouseMove;
 document.onmousedown = handleMouseDown;
 
+if(APPCONFIG.INITDRAWING){
+    state.insertTraceAndStrokeState(initialDrawingData.trace, initialDrawingData.strokeState);
+    grow();
+}
+
 function handleMouseDown(event){
     if(state.editModeState.editMode){
         EDITMODE.handleMouseDown(event, state);
@@ -54,20 +52,27 @@ function handleMouseMove(event){
     if(state.editModeState.editMode){
         EDITMODE.handleMouseMove(event, state);
     }
+    
+    // Hide counter when drawing on canvas
+    if((AGECOUNTER.nearAgeCounter(event.clientX, event.clientY))){
+        AGECOUNTER.softHideAgeCounter();
+    }else{
+        AGECOUNTER.softReviveAgeCounter();
+    }
 }
 
 async function totalReset(){
     await GROWING.abordGrowing(state);
     state.reset("canvas");
     state.dom.canvas.erase();
-    AGECOUNTER.resetAgeCounter();
+    AGECOUNTER.updateAgeCounter(0, state.treeConfig.maxAge);
 }
 
 async function growReset(){
     await GROWING.abordGrowing(state);
     CD.redrawStrokes(state.dom.canvas.trace, state.dom.canvasContext);
     state.reset("grow");
-    AGECOUNTER.resetAgeCounter();
+    AGECOUNTER.updateAgeCounter(0, state.treeConfig.maxAge);
 }
 
 async function grow(){
@@ -81,7 +86,7 @@ async function grow(){
     state.strokeState.structs = SB.createStructRootsFromStrokes(state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.treeConfig);
      
     AGECOUNTER.updateAgeCounter(0, state.treeConfig.maxAge);
-    GROWING.growStructs(state, debug);
+    GROWING.growStructs(state);
 }
 
 function downloadCanvasAsImage(){

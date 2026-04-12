@@ -1,9 +1,12 @@
+@use '../abstracts/variables' as *;
+
 .ageCounter{
     position: absolute;
-    top: 10px;
-    left: 10px;
-    color: red;
+    top: $padding * 2;
+    left: $padding * 2;
+    color: rgb(211, 0, 0);
     font-size: 18px;
+    font-weight: bold;
     width: fit-content;
     height: auto;
 }

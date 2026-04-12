@@ -46,8 +46,10 @@ class State{
                 editMode: document.getElementById("editModeButton"),
                 startPoint: document.getElementById("startPointButton"),
                 joinPoint: document.getElementById("joinPointButton"),
-                download: document.getElementById("downloadButton")
-            }
+                download: document.getElementById("downloadButton"),
+                ageCounter: document.getElementById("ageCounter"),
+            },
+            editModeButtonsContainer: document.getElementById("editModeButtonsContainer"),
         };
     }
 
@@ -63,6 +65,7 @@ class State{
             this.editModeState.thisJoinPoint = null;
             this.editModeState.thisStartPoint = null;
         }
+        this.updateStyleModeButtons();
     }
 
     setPlay(value=!this.growState.play){
@@ -99,23 +102,10 @@ class State{
     }
     
     updateStyleModeButtons(){
-        if(this.editModeState.joinPointMode){
-            this.dom.buttons.joinPoint.style.color = "white";
-            this.dom.buttons.joinPoint.style.backgroundColor = "blue";
-        }else{
-            this.dom.buttons.joinPoint.style.color = "blue";
-            this.dom.buttons.joinPoint.style.backgroundColor = "white";
-        }
-    
-        if(this.editModeState.startPointMode){
-            this.dom.buttons.startPoint.style.color = "white";
-            this.dom.buttons.startPoint.style.backgroundColor = "red";
-        }else{
-            this.dom.buttons.startPoint.style.color = "red";
-            this.dom.buttons.startPoint.style.backgroundColor = "white";
-        }
+        this.dom.editModeButtonsContainer.classList.toggle("editModeActive", this.editModeState.editMode);
+        this.dom.editModeButtonsContainer.classList.toggle("startMode", this.editModeState.startPointMode);
+        this.dom.editModeButtonsContainer.classList.toggle("joinMode", this.editModeState.joinPointMode);
     }
-
 
     checkStrokeStarts(){
         if(this.strokeState.strokeStarts.length > this.strokeState.strokes.length){
@@ -155,6 +145,11 @@ class State{
         };
     
         resets[level]?.();
+    }
+
+    insertTraceAndStrokeState(trace, strokeState){
+        this.dom.canvas.injectTrace(trace, false);
+        this.strokeState = strokeState;
     }
     
 }

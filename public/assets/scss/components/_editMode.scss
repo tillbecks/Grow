@@ -1,0 +1,37 @@
+@use "../abstracts/colors" as *;
+
+#editModeButton{
+    width: 250px;
+}
+
+#startPointButton{
+    color: $start-point-color;
+    visibility: hidden;
+    font-weight: bold;
+}
+
+#joinPointButton{
+    color: $join-point-color;
+    visibility: hidden;
+    font-weight: bold;
+}
+
+.editModeActive{
+    #joinPointButton, #startPointButton{
+        visibility: visible;
+    }
+}
+
+.joinMode{
+    #joinPointButton{
+        background-color: $join-point-color;
+        color: $primary-color;
+    }
+}
+
+.startMode{
+    #startPointButton{
+        background-color: $start-point-color;
+        color: $primary-color;
+    }
+}

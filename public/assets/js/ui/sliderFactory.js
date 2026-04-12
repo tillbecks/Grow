@@ -1,5 +1,5 @@
 import * as INFOBOX from "./infoBox.js";
-import * as SLIDERUPDATES from "../sliderUpdates.js";
+import * as SLIDERUPDATES from "./sliderUpdates.js";
 import { TREECONFIGVARIABLES, SLIDERSECTIONS } from "../config/sliderConfig.js";
 import * as SLIDERNAMING from "../config/sliderNaming.js";
 

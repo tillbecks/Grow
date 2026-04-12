@@ -1,3 +1,5 @@
+import * as AC from "../config/appConfig.js";
+
 export function drawStructs(trace, structs, context){
     redrawStrokes(trace, context);
     for(let node of structs){
@@ -11,22 +13,22 @@ export function drawEditMode(context, strokes, strokeStarts, joinPoints, trace){
         const strokeStart = strokeStarts[i];
         if(strokeStart != null){
             context.beginPath();
-            context.arc(strokes[i][strokeStart][0], strokes[i][strokeStart][1], 5, 0, 2 * Math.PI);
-            context.fillStyle = "rgba(255, 0, 0, 0.5)";
+            context.arc(strokes[i][strokeStart][0], strokes[i][strokeStart][1], AC.POINTRADIUS, 0, 2 * Math.PI);
+            context.fillStyle = AC.STARTPOINTCOLOR;
             context.fill();
         }
     }
     for(let joinPoint of joinPoints){
         context.beginPath();
-        context.arc(joinPoint.intersection[0], joinPoint.intersection[1], 5, 0, 2 * Math.PI);
-        context.fillStyle = "rgba(0, 0, 255, 0.5)";
+        context.arc(joinPoint.intersection[0], joinPoint.intersection[1], AC.POINTRADIUS, 0, 2 * Math.PI);
+        context.fillStyle = AC.JOINPOINTCOLOR;
         context.fill();
     }
 }
 
 export function redrawStrokes(strokes, context){
 
-    context.strokeStyle="#8E977D";
+    context.strokeStyle="#919191";
     context.lineWidth = 2;
 
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
@@ -37,5 +39,24 @@ export function redrawStrokes(strokes, context){
             context.lineTo(stroke[0][i], stroke[1][i]);
         }
         context.stroke();
+    }
+}
+
+export function drawDebugInfo(context, structs, crowdingMinDist, forceFields){
+    for(let points of forceFields){
+        for(let point of points){
+            //Mal einen Kreis in Rot der Durchlässig ist und mit dem Radius von TREE_CONFIG.crowdingMinDist um die Kraftpunkte
+            context.beginPath();
+            context.arc(point[0], point[1], crowdingMinDist, 0, 2 * Math.PI);
+            context.fillStyle = AC.FORCEFIELDCOLOR;
+            context.fill();
+        }
+    }
+
+    for(let node of structs){
+        context.beginPath();
+        context.arc(node.centerOfMass[0], node.centerOfMass[1], AC.COMRADIUS, 0, 2 * Math.PI);
+        context.fillStyle = AC.COMCOLOR;
+        context.fill();
     }
 }

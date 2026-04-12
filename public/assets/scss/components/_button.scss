@@ -5,10 +5,11 @@
     border-radius: 2px;
     cursor: pointer;
     font-size: 20px;
+    line-height: 1.3;
 }
 
 .button:disabled{
-        background: $dark-gray;
-        color: white;
+        background: $disabled-color;
+        color: $primary-color;
         cursor: not-allowed;
 }
