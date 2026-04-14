@@ -31,7 +31,9 @@ function redrawCanvas(){
 export function initCanvas(){
     backgroundCanvas.width = window.innerWidth;
     backgroundCanvas.height = window.innerHeight;
-
+    
+    backgroundCtx.lineCap = "round";
+    backgroundCtx.lineJoin = "round";
     backgroundCtx.fillStyle = SECONDARYCOLOR;
     backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 

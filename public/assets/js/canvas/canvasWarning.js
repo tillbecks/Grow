@@ -1,7 +1,7 @@
 import { WARNINGDISPLAYTIME } from "../config/appConfig.js";
 
 export default function spawnWarning(warningMessage){
-    const canvasSection = document.getElementById("canvasSection");
+    const canvasSection = document.getElementById("canvasAgeContainer");
 
     const warningBox = document.createElement("div");
     warningBox.classList.add('warningBox');

@@ -40,7 +40,7 @@ export const INITDRAWING = true;
 
 export const USERSTROKECOLOR = "#a7a7a7";
 export const GROWINGSTROKECOLOR = SECONDARYCOLOR;
-export const USERSTROKEWIDTH = 1;
+export const USERSTROKEWIDTH = 2;
 
 //Canvas download config
 
