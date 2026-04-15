@@ -74,6 +74,5 @@
         <script type="text/javascript" src="assets/js/libs/handwriting/handwriting.js"></script>
         <script type="text/javascript" src="assets/js/libs/handwriting/handwriting.canvas.js"></script>
         <script type="module" src="assets/js/main.js"></script>
-    </body>libs/handwriting/handwriting.js"></script>
-        <script type="text/javascript" src="assets/js/libs/handwriting
+    </body>
 </html>
