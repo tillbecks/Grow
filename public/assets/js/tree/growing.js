@@ -2,7 +2,7 @@ import * as CD from "../canvas/canvasDrawing.js";
 import * as AGECOUNTER from "../ui/ageCounter.js";
 import * as DRAWING from "../canvas/canvasDrawing.js";
 import {DEBUGMODE} from "../config/appConfig.js";
-import { PRIMARYCOLOR, SECONDARYCOLOR } from "../config/appConfig.js";
+import { SECONDARYCOLOR } from "../config/appConfig.js";
 
 export async function abordGrowing(state){
     if(state.growState.isGrowing){

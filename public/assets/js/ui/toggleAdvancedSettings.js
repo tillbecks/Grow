@@ -24,5 +24,5 @@ advancedSettingsToggle.addEventListener('click', () => {
 
 function setSettingsArrows(){
     const isHidden = advancedSettingsContainer.classList.contains('hidden');
-    settingsArrow.textContent = isHidden ? '⌄' : '⌃';
+    settingsArrow.textContent = isHidden ? '\u25BC' : '\u25B2';
 }
