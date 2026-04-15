@@ -64,7 +64,7 @@ export function drawDebugInfo(context, structs, crowdingMinDist, forceFields){
     resetColor(context);
 }
 
-export function drawTreeNode(primaryCanvas, secondaryCanvas, position, ancestorPosition, thickness){
+export function drawTreeNode(primaryCanvas, secondaryCanvas=null, position, ancestorPosition, thickness){
     const context = primaryCanvas.getContext("2d");
 
     context.lineWidth = (thickness);// + this.ancestor.thickness)/2;
@@ -74,17 +74,19 @@ export function drawTreeNode(primaryCanvas, secondaryCanvas, position, ancestorP
     context.lineTo(ancestorPosition[0], ancestorPosition[1]);
     context.stroke();
     resetColor(context);
-
-    const offsetX = primaryCanvas.getBoundingClientRect().left;
-    const offsetY = primaryCanvas.getBoundingClientRect().top;
-    const secondaryContext = secondaryCanvas.getContext("2d");
-    secondaryContext.lineWidth = (thickness);// + this.ancestor.thickness)/2;
-    secondaryContext.strokeStyle = AC.PRIMARYCOLOR; //Maybe later gradient depending on age or thickness
-    secondaryContext.beginPath();
-    secondaryContext.moveTo(position[0] + offsetX, position[1] + offsetY);
-    secondaryContext.lineTo(ancestorPosition[0] + offsetX, ancestorPosition[1] + offsetY);
-    secondaryContext.stroke();
-    resetColor(secondaryContext);
+    
+    if(secondaryCanvas){
+        const offsetX = primaryCanvas.getBoundingClientRect().left;
+        const offsetY = primaryCanvas.getBoundingClientRect().top;
+        const secondaryContext = secondaryCanvas.getContext("2d");
+        secondaryContext.lineWidth = (thickness);// + this.ancestor.thickness)/2;
+        secondaryContext.strokeStyle = AC.PRIMARYCOLOR; //Maybe later gradient depending on age or thickness
+        secondaryContext.beginPath();
+        secondaryContext.moveTo(position[0] + offsetX, position[1] + offsetY);
+        secondaryContext.lineTo(ancestorPosition[0] + offsetX, ancestorPosition[1] + offsetY);
+        secondaryContext.stroke();
+        resetColor(secondaryContext);
+    }
 }
 
 function resetColor(context){

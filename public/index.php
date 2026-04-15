@@ -36,9 +36,9 @@
                     <div class="settings-panel">
                         <h1>Controls</h1>
                         <div class="grid-2 flex-no-shrink-fill">
-                            <input id="resetButton" type="button" value="Reset" autocomplete="off" class="button">
-                            <input id="growButton" type="button" value="Grow" autocomplete="off" class="button">
-                            <input id="resetGrow" type="button" value="ResetGrow"  autocomplete="off" class="button">
+                            <input id="resetButton" type="button" value="Erase Canvas" autocomplete="off" class="button">
+                            <input id="growButton" type="button" value="Start Growth" autocomplete="off" class="button">
+                            <input id="resetGrow" type="button" value="Reset Growth"  autocomplete="off" class="button">
                             <input id="stopGrow" type="button" value="&#9654;" autocomplete="off" disabled="true" class="button">
                         </div>
                         <h1>Presets</h1>

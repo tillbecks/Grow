@@ -6,12 +6,13 @@
     @extend .flex-column;
     @extend .justify-start;
     @extend .items-start;
-    @include outlined;
+    @include outlined($secondary-color);
 
     color: $primary-color;
     font-size: 13px;
     overflow: auto; 
     height: 100%;
+    width: 100%;
 
     transition: height 0.5s ease, padding-top 0.5s ease;
     

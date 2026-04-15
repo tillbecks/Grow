@@ -6,14 +6,13 @@ export function redrawAndDownloadCanvasAsImage(canvas, structs){
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = width;
     tempCanvas.height = height;
-    const tempCtx = tempCanvas.getContext('2d');
     
     
     // NUR die schwarzen Baum-Linien zeichnen (keine User-Strokes!)
     if (structs.length > 0) {
         // Structs zeichnen
         for (let node of structs) {
-            node.draw(tempCtx);
+            node.draw(tempCanvas, null); // Zeichne nur auf tempCanvas, kein Hintergrund
         }
     }
     

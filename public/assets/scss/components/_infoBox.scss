@@ -1,4 +1,4 @@
-@use '../abstracts/variables' as *;
+@use '../abstracts' as *;
 @use '../layout/flexbox' as *;
 @use '../utilities/typography' as *;
 
@@ -21,6 +21,11 @@ $image-container-size: 250px;
     height: 35%;
     width: 100%;
     transition: height 1s ease, flex 1s ease;
+
+    @media (max-aspect-ratio: $horizontal-mode-ratio) {
+        align-items: center;
+    }
+
 }
 
 .info-section.collapsed{
@@ -41,7 +46,7 @@ $image-container-size: 250px;
 
 .info-box-container{
     @extend .of-hidden;
-    @include outlined;
+    @include outlined($secondary-color);
     height: 100%;
     width: 100%;
 
@@ -63,8 +68,6 @@ $image-container-size: 250px;
     font-size: 1.2em;
     z-index: 1;
 }
-
-
 
 .info-box-content{
     @extend .flex-column;

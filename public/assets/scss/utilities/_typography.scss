@@ -1,9 +1,11 @@
-@mixin outlined{
+@use '../abstracts' as *;
+
+@mixin outlined($color) {
     text-shadow: 
-                -1px -1px 0 black,
-                 1px -1px 0 black,
-                -1px  1px 0 black,
-                 1px  1px 0 black;
+                -1px -1px 0 $color,
+                 1px -1px 0 $color,
+                -1px  1px 0 $color,
+                 1px  1px 0 $color;
 }
 
 .underline{
@@ -15,14 +17,14 @@
 }
 
 h1{
-    @include outlined;
+    @include outlined($secondary-color);
     font-size: 1.5em;
     text-decoration: underline;
     font-weight: normal;
 }
 
 h2{
-    font-size: 1.5em;
+    @include outlined($secondary-color);
 
     font-weight: bold;
 }

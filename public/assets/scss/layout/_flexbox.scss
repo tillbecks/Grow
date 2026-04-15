@@ -83,6 +83,12 @@
     width: 100%;
     height: 100%;
     padding: 0;
+
+    @media (max-aspect-ratio: $horizontal-mode-ratio) {
+        flex-direction: column;
+        padding: $padding;
+        width: fit-content;
+    }
 }
 
 .canvas-section{
@@ -93,6 +99,13 @@
     @extend .relative;
     @extend .of-hidden;
     height: 100%;
+
+    @media (max-aspect-ratio: $horizontal-mode-ratio) {
+        flex-basis: 100%;
+        height: auto;
+        //width: 100%;
+        align-items: center;
+    }
 }
 
 .canvas-buttons-section{
@@ -111,6 +124,13 @@
     @extend .of-auto;
     width: 100%;
     height: 100%;
+
+    @media (max-aspect-ratio: $horizontal-mode-ratio) {
+        flex-basis: 100%;
+        height: auto;
+        width: 100%;
+        justify-content: flex-start;
+    }
 }
 
 /*height: 100%; width: min(2000px, 100%); display:flex; flex-direction: column; gap: 20px; padding: 20px; min-height: 0;*/

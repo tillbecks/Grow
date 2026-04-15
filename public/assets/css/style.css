@@ -202,9 +202,23 @@ body {
   height: 100%;
   padding: 0;
 }
+@media (max-aspect-ratio: 0.6667) {
+  .canvas-settings-container {
+    flex-direction: column;
+    padding: 10px;
+    width: fit-content;
+  }
+}
 
 .canvas-section {
   height: 100%;
+}
+@media (max-aspect-ratio: 0.6667) {
+  .canvas-section {
+    flex-basis: 100%;
+    height: auto;
+    align-items: center;
+  }
 }
 
 .canvas-buttons-section {
@@ -215,6 +229,14 @@ body {
 .settings-panel {
   width: 100%;
   height: 100%;
+}
+@media (max-aspect-ratio: 0.6667) {
+  .settings-panel {
+    flex-basis: 100%;
+    height: auto;
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 /*height: 100%; width: min(2000px, 100%); display:flex; flex-direction: column; gap: 20px; padding: 20px; min-height: 0;*/
@@ -273,7 +295,7 @@ h1 {
 }
 
 h2 {
-  font-size: 1.5em;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   font-weight: bold;
 }
 
@@ -283,6 +305,7 @@ h2 {
   font-size: 13px;
   overflow: auto;
   height: 100%;
+  width: 100%;
   transition: height 0.5s ease, padding-top 0.5s ease;
 }
 .slider-container .button {
@@ -362,6 +385,11 @@ h2 {
   cursor: pointer;
   font-size: 20px;
   line-height: 1.3;
+  color: black;
+  background: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .button:disabled {
@@ -452,11 +480,12 @@ canvas {
   position: absolute;
   top: 20px;
   left: 20px;
-  color: rgb(211, 0, 0);
+  color: black;
   font-size: 18px;
   font-weight: bold;
   width: fit-content;
   height: auto;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
 }
 
 .ageCounter.hidden {
@@ -467,6 +496,11 @@ canvas {
   height: 35%;
   width: 100%;
   transition: height 1s ease, flex 1s ease;
+}
+@media (max-aspect-ratio: 0.6667) {
+  .info-section {
+    align-items: center;
+  }
 }
 
 .info-section.collapsed {
