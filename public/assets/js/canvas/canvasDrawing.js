@@ -32,7 +32,7 @@ export function redrawStrokes(strokes, context){
     context.strokeStyle = AC.USERSTROKECOLOR;
     context.lineWidth = AC.USERSTROKEWIDTH;
 
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    clearCanvas(context, AC.SECONDARYCOLOR);
     for(let stroke of strokes){
         context.beginPath();
         context.moveTo(stroke[0][0], stroke[1][0]);
@@ -87,19 +87,12 @@ export function drawTreeNode(primaryCanvas, secondaryCanvas, position, ancestorP
     resetColor(secondaryContext);
 }
 
-export function copyInvertCanvas(sourceCanvas, targetCanvas){
-    const offsetX = sourceCanvas.getBoundingClientRect().left;
-    const offsetY = sourceCanvas.getBoundingClientRect().top;
-
-    const targetContext = targetCanvas.getContext('2d');
-    targetContext.fillStyle = AC.SECONDARYCOLOR;
-    targetContext.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
-    targetContext.filter = "invert(1)";
-    targetContext.drawImage(sourceCanvas, offsetX, offsetY);
-    targetContext.filter = "none";
-}
-
 function resetColor(context){
     context.strokeStyle = AC.USERSTROKECOLOR;
     context.lineWidth = AC.USERSTROKEWIDTH;
+}
+
+export function clearCanvas(context, color){
+    context.fillStyle = color;
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 }
