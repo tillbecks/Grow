@@ -46,7 +46,7 @@
                             <select class="presetDropdown" name="treeConfig" id="presetSelector">
                                 <!-- Options will be populated by JavaScript -->
                             </select>
-                            <input id="loadPreset" type="button" value="Load Preset" autocomplete="off" class="button">
+                            <!--input id="loadPreset" type="button" value="Load Preset" autocomplete="off" class="button"-->
                         </div>
                         <div id="advancedSettingsToggle" class="flex-row"> <h1 class="clickable">Advanced Settings</h1><span id="settingsArrow">&#9660;</span></div>
                         <div id="advancedSettingsContainer" class="slider-container hidden" style="">

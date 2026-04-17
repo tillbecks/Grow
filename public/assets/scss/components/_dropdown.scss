@@ -9,3 +9,7 @@
     color: $secondary-color;
     background: $primary-color;
 }
+
+.presetDropdown > option[value="Custom"] {
+    display: none;
+}

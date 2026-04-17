@@ -47,8 +47,8 @@ const fishBone = {
     standardSproutAngle: 2.251474735072685
 };
 
-const humongousTree = {
-    name: "Humongous Tree",
+const bigBranch = {
+    name: "Big Branch",
     awayFromCOMInfluence: 0.12,
     breakingOffProb: 0,
     crowdingFactor: 0.9,
@@ -109,5 +109,5 @@ const cityMap = {
 
 
 
-export const treeConfigs = [defaultConfig, fishBone, humongousTree, lightning, cityMap];
+export const treeConfigs = [defaultConfig, fishBone, bigBranch, lightning, cityMap];
 export const defaultTreeConfigIndex = 0;

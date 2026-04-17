@@ -56,21 +56,22 @@ function handleMouseMove(event){
         EDITMODE.handleMouseMove(event, state);
     }
     
-    // Hide counter when drawing on canvas
-    if((AGECOUNTER.nearAgeCounter(event.clientX, event.clientY))){
-        AGECOUNTER.softHideAgeCounter();
-    }else{
-        AGECOUNTER.softReviveAgeCounter();
-    }
+    AGECOUNTER.handleMouseMove(event);
 }
 
 async function totalReset(){
+    if(state.editModeState.editMode){
+        EDITMODE.setEditMode(state);
+    }
     await GROWING.abordGrowing(state);
     state.reset("canvas");
     AGECOUNTER.updateAgeCounter(0, state.treeConfig.maxAge);
 }
 
 async function growReset(){
+    if(state.editModeState.editMode){
+        EDITMODE.setEditMode(state);
+    }
     await GROWING.abordGrowing(state);
     CD.redrawStrokes(state.dom.canvas.trace, state.dom.canvasContext);
     state.reset("grow");
@@ -78,6 +79,9 @@ async function growReset(){
 }
 
 async function grow(){
+    if(state.editModeState.editMode){
+        EDITMODE.setEditMode(state);
+    }
     await GROWING.abordGrowing(state);
     state.reset("grow");
 

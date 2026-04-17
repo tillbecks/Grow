@@ -77,3 +77,11 @@ export function nearAgeCounter(mouseX, mouseY){
     }
     return mouseX >= lastRect.left - PROXIMITYTHRESHOLD && mouseX <= lastRect.right + PROXIMITYTHRESHOLD && mouseY >= lastRect.top - PROXIMITYTHRESHOLD && mouseY <= lastRect.bottom + PROXIMITYTHRESHOLD;
 }
+
+export function handleMouseMove(event){
+    if(nearAgeCounter(event.clientX, event.clientY)){
+        softHideAgeCounter();
+    }else{
+        softReviveAgeCounter();
+    }
+}
