@@ -14,12 +14,10 @@ import state from "./state/state.js";
 import { redrawAndDownloadCanvasAsImage } from "./ui/downloadCanvas.js";
 import * as BACKGROUNDCANVAS from "./ui/backgroundCanvas.js";
 
+// Critical path - synchronous initialization
 SLIDERFACTORY.createSliderSection();
-INFOBOX.addBindingsToInfoBox();
 PRESETLOADER.configurePresetSelector();
 PRESETLOADER.loadDefaultPreset();
-TOGGLEADVANCEDSETTINGS.init();
-AGECOUNTER.spawnCounter(state.treeConfig.maxAge);
 BACKGROUNDCANVAS.initCanvas();
 
 let actionQueue = Promise.resolve();
@@ -40,10 +38,17 @@ state.dom.buttons.download.addEventListener("click", ()=>{redrawAndDownloadCanva
 document.onmousemove = handleMouseMove;
 document.onmousedown = handleMouseDown;
 
-if(APPCONFIG.INITDRAWING){
-    state.insertTraceAndStrokeState(initialDrawingData.trace, initialDrawingData.strokeState);
-    grow();
-}
+// Deferred initialization - non-critical features load after page is interactive
+window.addEventListener("load", () => {
+    INFOBOX.addBindingsToInfoBox();
+    TOGGLEADVANCEDSETTINGS.init();
+    AGECOUNTER.spawnCounter(state.treeConfig.maxAge);
+    
+    if(APPCONFIG.INITDRAWING){
+        state.insertTraceAndStrokeState(initialDrawingData.trace, initialDrawingData.strokeState);
+        grow();
+    }
+});
 
 function handleMouseDown(event){
     if(state.editModeState.editMode){
