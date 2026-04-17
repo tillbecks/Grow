@@ -28,14 +28,23 @@ export function reloadPresetSelector(){
         const option = document.createElement("option");
         option.value = i;
         option.textContent = TCPRESETS.treeConfigs[i].name;
-        option.addEventListener("click", () => {
-            loadPreset(option.value);
-            deactivateSaveButton();
-        });
         presetSelector.appendChild(option);
     }
 
     loadCustomPresets();
+    
+    // Use change event instead of click for better mobile compatibility
+    presetSelector.addEventListener("change", () => {
+        handlePresetChange(presetSelector.value);
+    });
+}
+
+function handlePresetChange(value) {
+    if (value === CUSTOMNAME) {
+        setCustomValue();
+    } else {
+        loadPreset(parseInt(value));
+    }
 }
 
 function loadCustomPresets(){
@@ -45,10 +54,6 @@ function loadCustomPresets(){
         const option = document.createElement("option");
         option.value = i + TCPRESETS.treeConfigs.length; // Custom presets start after default presets
         option.textContent = name;
-        option.addEventListener("click", () => {
-            loadPreset(option.value);
-            deactivateSaveButton();
-        });
         presetSelector.appendChild(option);
     }
 }

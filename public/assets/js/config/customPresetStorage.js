@@ -1,12 +1,34 @@
 const CUSTOM_PRESETS_KEY = 'customPresets';
 
 /**
+ * Checks if localStorage is available and writable
+ * @returns {boolean} true if localStorage is available
+ */
+export function isLocalStorageAvailable() {
+    try {
+        const testKey = '__test__';
+        localStorage.setItem(testKey, 'test');
+        localStorage.removeItem(testKey);
+        return true;
+    } catch (e) {
+        // Private mode or quota exceeded
+        console.warn('localStorage not available:', e.message);
+        return false;
+    }
+}
+
+/**
  * Saves a custom preset to localStorage
  * @param {string} presetName - Name of the preset
  * @param {object} config - The configuration object to save
  * @returns {boolean} true if saved successfully, false if no space or error
  */
 export function saveCustomPreset(presetName, config) {
+    if (!isLocalStorageAvailable()) {
+        console.warn('localStorage not available');
+        return false;
+    }
+
     try {
         const customPresets = JSON.parse(localStorage.getItem(CUSTOM_PRESETS_KEY) || '{}');
         customPresets[presetName] = {
@@ -31,6 +53,10 @@ export function saveCustomPreset(presetName, config) {
  * @returns {object|null} The configuration object or null if not found
  */
 export function loadCustomPreset(presetName) {
+    if (!isLocalStorageAvailable()) {
+        return null;
+    }
+
     try {
         const customPresets = JSON.parse(localStorage.getItem(CUSTOM_PRESETS_KEY) || '{}');
         if (customPresets[presetName]) {
@@ -48,6 +74,10 @@ export function loadCustomPreset(presetName) {
  * @returns {object} Object with preset names as keys and config objects as values
  */
 export function getCustomPresets() {
+    if (!isLocalStorageAvailable()) {
+        return {};
+    }
+
     try {
         const customPresets = JSON.parse(localStorage.getItem(CUSTOM_PRESETS_KEY) || '{}');
         const result = {};
@@ -66,6 +96,10 @@ export function getCustomPresets() {
  * @returns {string[]} Array of preset names
  */
 export function getCustomPresetNames() {
+    if (!isLocalStorageAvailable()) {
+        return [];
+    }
+
     try {
         const customPresets = JSON.parse(localStorage.getItem(CUSTOM_PRESETS_KEY) || '{}');
         return Object.keys(customPresets);
@@ -81,6 +115,10 @@ export function getCustomPresetNames() {
  * @returns {boolean} true if deleted successfully, false if not found or error
  */
 export function deleteCustomPreset(presetName) {
+    if (!isLocalStorageAvailable()) {
+        return false;
+    }
+
     try {
         const customPresets = JSON.parse(localStorage.getItem(CUSTOM_PRESETS_KEY) || '{}');
         if (customPresets[presetName]) {

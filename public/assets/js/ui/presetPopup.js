@@ -1,4 +1,4 @@
-import { saveCustomPreset, getCustomPresetNames, deleteCustomPreset } from "../config/customPresetStorage.js";
+import { saveCustomPreset, getCustomPresetNames, deleteCustomPreset, isLocalStorageAvailable } from "../config/customPresetStorage.js";
 import * as POPUP from "./popup.js";
 import { highlightTemporary } from "../config/utils.js";
 import state from "../state/state.js";
@@ -166,6 +166,11 @@ function getReplacePresetContent(presetName){
 
 export function activateSaveButton(){
     const saveButton = document.getElementById("savePreset");
+    if (!isLocalStorageAvailable()) {
+        saveButton.style.display = "none";
+        return;
+    }
+    saveButton.style.display = "";
     saveButton.disabled = false;
     saveButton.addEventListener("click", () => {
         POPUP.setPopupContent(getSetNameContent());
