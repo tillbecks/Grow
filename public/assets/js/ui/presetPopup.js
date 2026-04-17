@@ -2,7 +2,7 @@ import { saveCustomPreset, getCustomPresetNames, deleteCustomPreset, isLocalStor
 import * as POPUP from "./popup.js";
 import { highlightTemporary } from "../config/utils.js";
 import state from "../state/state.js";
-import { reloadPresetSelector } from "./presetLoader.js";
+import { reloadPresetSelector, setLatestValue } from "./presetLoader.js";
 
 function getSetNameContent(){
     const title = document.createElement("p");
@@ -69,6 +69,7 @@ function getSuccesfulSaveContent(){
     okButton.addEventListener("click", () => {
         POPUP.hidePopup();
         reloadPresetSelector();
+        setLatestValue();
     });
 
     const container = document.createElement("div");
