@@ -2,6 +2,7 @@ import * as POINTACTIONS from "../tree/joinStartPointActions.js";
 import * as TCPRESETS from "../config/treeConfigPresets.js";
 import * as AC from "../config/appConfig.js";
 import * as DRAWING from "../canvas/canvasDrawing.js";
+import * as UTILS from "../config/utils.js";
 
 class State{
     constructor(){
@@ -118,6 +119,12 @@ class State{
     }
 
     checkStrokeStarts(){
+        //Cleanup of strokeStarts to protect for exceptions in case of branch Length changes
+        const oldStrokes = this.strokeState.strokes;
+        this.strokeState.strokes = UTILS.strokePreprocessing(this.dom.canvas.getTrace(), this.treeConfig.sproutingLength);
+        this.strokeState.strokeStarts = UTILS.mapStartPointsNewLength(oldStrokes, this.strokeState.strokes, this.strokeState.strokeStarts);
+        this.strokeState.strokeStartsCache = UTILS.mapStartPointsNewLength(oldStrokes, this.strokeState.strokes, this.strokeState.strokeStartsCache);
+
         if(this.strokeState.strokeStarts.length > this.strokeState.strokes.length){
             this.strokeState.strokeStarts = this.strokeState.strokeStarts.slice(0, this.strokeState.strokes.length);
         }

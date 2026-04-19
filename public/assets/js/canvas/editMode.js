@@ -12,10 +12,8 @@ export async function setEditMode(state){
         state.reset("editMode");
         
         state.dom.canvas.deactivate();
-        if(state.dom.canvas.hasChanged){
-            state.strokeState.strokes = UTILS.strokePreprocessing(state.dom.canvas.getTrace(), state.treeConfig.sproutingLength);
-            state.checkStrokeStarts();
-        }
+
+        state.checkStrokeStarts();
 
         state.dom.pureCanvas.classList.add("not-allowed-cursor");
         state.dom.buttons.editMode.value = "Exit Edit Mode"; 

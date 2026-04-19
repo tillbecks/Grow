@@ -89,14 +89,9 @@ async function grow(){
     }
     await GROWING.abordGrowing(state);
     state.reset("grow");
-
-    if(state.dom.canvas.hasChanged){
-        const oldStrokes = state.strokeState.strokes;
-        state.strokeState.strokes = UTILS.strokePreprocessing(state.dom.canvas.getTrace(), state.treeConfig.sproutingLength);
-        state.strokeState.strokeStarts = UTILS.mapStartPointsNewLength(oldStrokes, state.strokeState.strokes, state.strokeState.strokeStarts);
-        state.strokeState.strokeStartsCache = UTILS.mapStartPointsNewLength(oldStrokes, state.strokeState.strokes, state.strokeState.strokeStartsCache);
-        state.checkStrokeStarts();
-    }
+    
+    state.checkStrokeStarts();
+    
 
     state.strokeState.structs = SB.createStructRootsFromStrokes(state.strokeState.strokes, state.strokeState.strokeStarts, state.strokeState.joinPoints, state.treeConfig);
      
