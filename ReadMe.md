@@ -1,4 +1,4 @@
-<img title="" src="./.github/assets/GrowLogoBackground.png" alt="GrowLogoBackground.png" width="636" data-align="center">
+![GrowLogoBackground](.github/assets/GrowLogoBackground.png)
 
 # The GROW-Project
 
@@ -38,9 +38,9 @@ First, I changed the data format from two separate arrays of x and y coordinates
 ```
 
 Next, I interpolate additional points between coordinates that are far apart. These gaps usually occur when drawing straight lines. Since the algorithm creates nodes at each point, and new branches can only grow from nodes, large gaps would prevent proper branching and lead to uneven growth.
-<img src="./.github/assets/StartPointEditor.png" title="" alt="GrowLogoBackground.png" width="269">To control where the growth starts, each stroke has a defined **start point**. These are stored as indices pointing to coordinate tuples within the stroke. In Edit Mode, they are displayed as red dots and can be adjusted.
+![StartPointEditor](.github/assets/StartPointEditor.png)To control where the growth starts, each stroke has a defined **start point**. These are stored as indices pointing to coordinate tuples within the stroke. In Edit Mode, they are displayed as red dots and can be adjusted.
 
-<img title="" src="./.github/assets/CyclicJoinPoint.png" alt="GrowLogoBackground.png" width="271">I also introduced **join points**, which connect two strokes so they behave as a single structure. Each resulting structure can only have one starting point, even if it consists of multiple strokes. They can be added and removed in Edit Mode and are represented by blue dots. Cyclic joins are not allowed; the program displays an error popup if the user attempts to create one. Internally, a join point is represented as:
+![CyclicJoinPoint](.github/assets/CyclicJoinPoint.png)I also introduced **join points**, which connect two strokes so they behave as a single structure. Each resulting structure can only have one starting point, even if it consists of multiple strokes. They can be added and removed in Edit Mode and are represented by blue dots. Cyclic joins are not allowed; the program displays an error popup if the user attempts to create one. Internally, a join point is represented as:
 
 ```
 { strokeA, pointAIndex, strokeB, pointBIndex, intersection }
@@ -55,7 +55,7 @@ Where:
 From the processed strokes, start points, join points, and a configuration object, the program constructs **structs** that drive the growth simulation.
 These structs consist of tree structures built from the defined strokes. Each stroke point becomes a node with one ancestor and possibly multiple descendants. The nodes are parameterized with a set of values that control their behavior during growth.
 
-<img src="./.github/assets/GrowingDirection.png" title="" alt="GrowLogoBackground.png" width="343">Starting from the initial node, the structure grows outward in both directions, adding one node per cycle (“year”). All nodes age until the starting node reaches the defined maximum age.
+![GrowingDirection](.github/assets/GrowingDirection.png)Starting from the initial node, the structure grows outward in both directions, adding one node per cycle (“year”). All nodes age until the starting node reaches the defined maximum age.
 As the main structure grows, nodes can sprout side branches depending on the configured probabilities. These side branches can recursively sprout further branches, leading to complex, organic patterns.
 
 #### Parameters
@@ -131,4 +131,4 @@ npm run sass
 
 To conclude this README, here are some images created using the website. Feel free to download any of your creations and use them however you like. Enjoy :-)
 
-<img src="./.github/assets/Demo1.png" title="" alt="GrowLogoBackground.png" width="288"><img src="./.github/assets/Demo2.png" title="" alt="GrowLogoBackground.png" width="222"><img src="./.github/assets/Demo3.png" title="" alt="GrowLogoBackground.png" width="248"><img src="./.github/assets/Demo4.png" title="" alt="GrowLogoBackground.png" width="223"><img src="./.github/assets/Demo5.png" title="" alt="GrowLogoBackground.png" width="214"><img src="./.github/assets/Demo6.png" title="" alt="GrowLogoBackground.png" width="335">
+![Demo1](.github/assets/Demo1.png) ![Demo2](.github/assets/Demo2.png) ![Demo3](.github/assets/Demo3.png) ![Demo4](.github/assets/Demo4.png) ![Demo5](.github/assets/Demo5.png) ![Demo6](.github/assets/Demo6.png)
