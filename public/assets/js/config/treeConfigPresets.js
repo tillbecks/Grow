@@ -63,7 +63,7 @@ const bigBranch = {
     sproutingGrowProb: 0.28,
     sproutingLength: 5,
     standardSproutAngle: 1.5707963267948966,
-}
+};
 
 const lightning = {
     name: "Lightning",
@@ -83,7 +83,7 @@ const lightning = {
     sproutingGrowProb: 0.21,
     sproutingLength: 10,
     standardSproutAngle: 3.141592653589793
-}
+};
 
 const cityMap = {
     name: "City Map",
@@ -103,7 +103,87 @@ const cityMap = {
     sproutingGrowProb: 0.1,
     sproutingLength: 12,
     standardSproutAngle: 1.4486232791552935
+};
+
+const denseWeb = {
+    name: "Dense Web",
+    initThickness:1,
+    growRate:0.03,
+    maxThickness:5,
+    maxAge:216,
+    mainSproutingRate:0.002,
+    secondarySproutingRate:0.0187,
+    sproutingLength:18,
+    sproutingGrowProb:0.4,
+    influenceVectorInfluence:0,
+    maxRandomRotationTip:0.3141592653589793,
+    standardSproutAngle:2.2165681500327987,
+    breakingOffProb:0.0006,
+    awayFromCOMInfluence:0.21,
+    crowdingMinDist:30,
+    crowdingFactor:0.9,
+    minSproutingAge:25,
+};
+
+const oldWillow = {
+    name: "Old Willow",
+    awayFromCOMInfluence: 0.37,
+    breakingOffProb: 0.0004,
+    crowdingFactor: 0.9,
+    crowdingMinDist: 30,
+    growRate: 0.15,
+    influenceVectorInfluence: 0,
+    initThickness: 1,
+    mainSproutingRate: 0.001,
+    maxAge: 200,
+    maxRandomRotationTip: 1.5707963267948966,
+    maxThickness: 14,
+    minSproutingAge: 47,
+    secondarySproutingRate: 0.0059,
+    sproutingGrowProb: 0.96,
+    sproutingLength: 7,
+    standardSproutAngle: 0,
+};
+
+const fluff = {
+    name: "Fluff",
+    awayFromCOMInfluence: 0.16,
+    breakingOffProb: 0,
+    crowdingFactor: 0.9,
+    crowdingMinDist: 30,
+    growRate: 0.89,
+    influenceVectorInfluence: 0,
+    initThickness: 9,
+    mainSproutingRate: 0.0088,
+    maxAge: 150,
+    maxRandomRotationTip: 0.3141592653589793,
+    maxThickness: 20,
+    minSproutingAge: 81,
+    secondarySproutingRate: 0.0008,
+    sproutingGrowProb: 0.45,
+    sproutingLength: 5,
+    standardSproutAngle: 1.5707963267948966
+};
+
+const bigShock = {
+    name: "Big Shock",
+    awayFromCOMInfluence: 0.5,
+    breakingOffProb: 0,
+    crowdingFactor: 0.9,
+    crowdingMinDist: 30,
+    growRate: 0.05,
+    influenceVectorInfluence: 0,
+    initThickness: 1,
+    mainSproutingRate: 0.0013,
+    maxAge: 150,
+    maxRandomRotationTip: 0.40142572795869574,
+    maxThickness: 10,
+    minSproutingAge: 25,
+    secondarySproutingRate: 0.002,
+    sproutingGrowProb: 0.46,
+    sproutingLength: 20,
+    standardSproutAngle: 1.5707963267948966,
 }
 
-export const treeConfigs = [defaultConfig, fishBone, bigBranch, lightning, cityMap];
+export const treeConfigs = [defaultConfig, fishBone, bigBranch, lightning, cityMap, denseWeb, oldWillow, fluff, bigShock];
 export const defaultTreeConfigIndex = 0;

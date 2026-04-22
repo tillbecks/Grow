@@ -10,7 +10,7 @@ export class Node {
         if(position[0] == null || position[1] == null){
             console.log("Position should be an array of [x, y], but got:", position);
         }
-        this.config = structuredClone(config);
+        this.config = config;
         //this.config = config;
 
         this.position = position;

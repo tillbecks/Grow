@@ -1,6 +1,5 @@
 import state from "../state/state.js";
 import dom from "../state/domState.js";
-import * as EDITMODE from "../canvas/editMode.js";
 import * as CD from "../canvas/canvasDrawing.js";
 import * as GROWING from "../tree/growing.js";
 import * as SB from "../tree/structBuilder.js";
@@ -31,7 +30,7 @@ export function bindMainButtons(){
  */
 async function totalReset(){
     if(state.editModeState.editMode){
-        EDITMODE.setEditMode(state);
+        enqueueAction(setEditMode);
     }
     await GROWING.abordGrowing(state);
     state.reset("canvas");
@@ -44,7 +43,7 @@ async function totalReset(){
  */
 async function growReset(){
     if(state.editModeState.editMode){
-        EDITMODE.setEditMode(state);
+        enqueueAction(setEditMode);
     }
     await GROWING.abordGrowing(state);
     CD.redrawStrokes(dom.canvas.trace, dom.canvasContext);
@@ -61,7 +60,7 @@ export function callGrow(){
  */
 async function grow(){
     if(state.editModeState.editMode){
-        EDITMODE.setEditMode(state);
+        enqueueAction(setEditMode);
     }
     await GROWING.abordGrowing(state);
     state.reset("grow");

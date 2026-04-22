@@ -59,7 +59,7 @@ function submitFunction(input){
 }
 
 function savePresetWithName(name){
-    const success = saveCustomPreset(name, state.treeConfig);
+    const success = saveCustomPreset(name, presetNameChange(state.treeConfig, name));
     if(success){
         POPUP.setPopupContent(getSuccesfulSaveContent());
     }else{
@@ -202,7 +202,7 @@ function getReplacePresetContent(presetName, secondReplaceAttempt = false){
     replaceButton.addEventListener("click", () => {
         const selectedPreset = presetDropdown.value;
         deleteCustomPreset(selectedPreset);
-        const success = saveCustomPreset(presetName, state.treeConfig);
+        const success = saveCustomPreset(presetName, presetNameChange(state.treeConfig, presetName));
         if(success){
             POPUP.setPopupContent(getSuccesfulSaveContent());
         }else{
@@ -247,5 +247,11 @@ export function activateSaveButton(){
 export function deactivateSaveButton(){
     const saveButton = dom.getElementById("savePreset");
     saveButton.disabled = true;
+}
+
+function presetNameChange(preset, newName){
+    const config = structuredClone(preset);
+    config.name = newName;
+    return config;
 }
 
