@@ -79,6 +79,28 @@ textarea:not([rows]) {
   forced-color-adjust: none;
 }
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #888888 transparent;
+}
+html::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+html::-webkit-scrollbar-thumb {
+  background: #888888;
+  border-radius: 6px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #555555;
+  background-clip: content-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -289,6 +311,14 @@ body {
 
 .bold {
   font-weight: bold;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.no-decoration, .popup-content-div a {
+  text-decoration: none;
 }
 
 h1 {
@@ -718,13 +748,23 @@ canvas {
   max-height: 90%;
   overflow: auto;
   font-size: 20px;
-  text-align: center;
 }
 
 .popup-title {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.popup-content-div {
+  text-align: center;
+}
+.popup-content-div p {
+  width: 100%;
+}
+.popup-content-div a {
+  width: 100%;
+  color: white;
 }
 
 .popup-button-div {
@@ -745,6 +785,12 @@ canvas {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+.impressum {
+  width: 100%;
+  text-align: center;
+  color: rgb(212, 212, 212);
 }
 
 .highlight-red {

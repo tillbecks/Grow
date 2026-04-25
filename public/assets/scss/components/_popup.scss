@@ -1,4 +1,5 @@
 @use '../abstracts' as *;
+@use '../utilities/typography' as *;
 @use '../layout/flexbox' as *;
 
 .popup{
@@ -30,7 +31,6 @@
     overflow: auto;
 
     font-size: 20px;
-    text-align: center;
 }
 
 .popup-title{
@@ -41,6 +41,19 @@
 
 .popup-content-div{
     @extend .flex-column;
+
+    text-align: center;
+
+    p{
+        width: 100%;
+    }
+
+    a{
+        @extend .no-decoration;
+        width: 100%;
+        color: $primary-color;
+
+    }
 }
 
 .popup-button-div{

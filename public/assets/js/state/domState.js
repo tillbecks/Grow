@@ -10,41 +10,43 @@ class domState{
         this.pureCanvas = canvas;
         this.canvasContext = canvas.getContext("2d");
         this.canvas = new window.handwriting.Canvas(canvas, AC.USERSTROKEWIDTH);
-        this.backgroundCanvas = document.getElementById("backgroundCanvas");
+        this.backgroundCanvas = this.getElementById("backgroundCanvas");
         this.backgroundCanvasContext = this.backgroundCanvas.getContext("2d");
         this.buttons = {
-            resetButton: document.getElementById("resetButton"),
-            growButton: document.getElementById("growButton"),
-            resetGrow: document.getElementById("resetGrow"),
-            stopGrow: document.getElementById("stopGrow"),
-            editMode: document.getElementById("editModeButton"),
-            startPoint: document.getElementById("startPointButton"),
-            joinPoint: document.getElementById("joinPointButton"),
-            download: document.getElementById("downloadButton"),
-            loadPreset: document.getElementById("loadPreset"),
-            infoBoxHideButton: document.getElementById("infoBoxHideButton")
+            resetButton: this.getElementById("resetButton"),
+            growButton: this.getElementById("growButton"),
+            resetGrow: this.getElementById("resetGrow"),
+            stopGrow: this.getElementById("stopGrow"),
+            editMode: this.getElementById("editModeButton"),
+            startPoint: this.getElementById("startPointButton"),
+            joinPoint: this.getElementById("joinPointButton"),
+            download: this.getElementById("downloadButton"),
+            loadPreset: this.getElementById("loadPreset"),
+            infoBoxHideButton: this.getElementById("infoBoxHideButton")
         };
-        this.editModeButtonsContainer = document.getElementById("editModeButtonsContainer");
+        this.editModeButtonsContainer = this.getElementById("editModeButtonsContainer");
 
-        this.canvasAgeSection = document.getElementById("canvasAgeContainer");
-        this.canvasScrollContainer = document.getElementById('canvasScrollContainer');
+        this.canvasAgeSection = this.getElementById("canvasAgeContainer");
+        this.canvasScrollContainer = this.getElementById('canvasScrollContainer');
             
-        this.infoSection = document.getElementById("infoSection");
-        this.infoBoxContainer = document.querySelector(".info-box-container");
+        this.infoSection = this.getElementById("infoSection");
+        this.infoBoxContainer = this.getElementById("infoBoxContainer");
 
 
-        this.popup = document.getElementById("popup");
-        this.popupContent = document.getElementById("popupContent");
+        this.popup = this.getElementById("popup");
+        this.popupContent = this.getElementById("popupContent");
 
-        this.presetSelector = document.getElementById("presetSelector");
+        this.presetSelector = this.getElementById("presetSelector");
 
-        this.advancedSettingsToggle = document.getElementById('advancedSettingsToggle');
-        this.advancedSettingsContainer = document.getElementById('advancedSettingsContainer');
-        this.settingsArrow = document.getElementById('settingsArrow');
+        this.advancedSettingsToggle = this.getElementById('advancedSettingsToggle');
+        this.advancedSettingsContainer = this.getElementById('advancedSettingsContainer');
+        this.settingsArrow = this.getElementById('settingsArrow');
+
+        this.impressum = this.getElementById("impressum");
     }
 
     initCanvas(){
-        const canvas = document.getElementById("canvas");
+        const canvas = this.getElementById("canvas");
         //Set canvas drawing color and width
         canvas.getContext("2d").strokeStyle = AC.USERSTROKECOLOR;
         canvas.getContext("2d").lineWidth = AC.USERSTROKEWIDTH;

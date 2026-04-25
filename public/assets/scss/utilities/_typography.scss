@@ -16,6 +16,14 @@
     font-weight: bold;
 }
 
+.left-align{
+    text-align: left;
+}
+
+.no-decoration{
+    text-decoration: none;
+}
+
 h1{
     @include outlined($secondary-color);
     font-size: 1.5em;

@@ -11,6 +11,7 @@ import * as MAINBUT from "./ui/mainButton.js";
 import { bindMouseHandlers } from "./ui/mouseHandle.js";
 import { resizeTraceToCanvas } from "./config/utils.js";
 import dom from "./state/domState.js";
+import { impressumPopupInit } from "./ui/impressumPopup.js";
 
 // Critical path - synchronous initialization
 SLIDERFACTORY.createSliderSection();
@@ -19,6 +20,7 @@ PRESETLOADER.loadDefaultPreset();
 BACKGROUNDCANVAS.initCanvas();
 MAINBUT.bindMainButtons();
 bindMouseHandlers();
+impressumPopupInit();
 
 // Deferred initialization - non-critical features load after page is interactive
 window.addEventListener("load", () => {
