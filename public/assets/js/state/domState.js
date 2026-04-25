@@ -22,12 +22,13 @@ class domState{
             joinPoint: this.getElementById("joinPointButton"),
             download: this.getElementById("downloadButton"),
             loadPreset: this.getElementById("loadPreset"),
-            infoBoxHideButton: this.getElementById("infoBoxHideButton")
+            infoBoxHideButton: this.getElementById("infoBoxHideButton"),
+            savePresetButton: this.getElementById("savePreset"),
         };
         this.editModeButtonsContainer = this.getElementById("editModeButtonsContainer");
 
         this.canvasAgeSection = this.getElementById("canvasAgeContainer");
-        this.canvasScrollContainer = this.getElementById('canvasScrollContainer');
+        this.canvasScrollContainer = this.getElementById("canvasScrollContainer");
             
         this.infoSection = this.getElementById("infoSection");
         this.infoBoxContainer = this.getElementById("infoBoxContainer");

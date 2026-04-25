@@ -232,21 +232,24 @@ function getReplacePresetContent(presetName, secondReplaceAttempt = false){
 }
 
 export function activateSaveButton(){
-    const saveButton = dom.getElementById("savePreset");
     if (!isLocalStorageAvailable()) {
-        saveButton.style.display = "none";
+        dom.buttons.savePresetButton.style.display = "none";
         return;
     }
-    saveButton.style.display = "";
-    saveButton.disabled = false;
-    saveButton.addEventListener("click", () => {
-        POPUP.setPopupContent(getSetNameContent());
+    dom.buttons.savePresetButton.style.display = "";
+    dom.buttons.savePresetButton.disabled = false;
+    dom.buttons.savePresetButton.addEventListener("click", () => {
+        if(isLocalStorageAvailable()){
+            POPUP.setPopupContent(getSetNameContent());
+        }
+        else{
+            POPUP.setPopupContent(getErrorContent("Local storage is not available. Please allow local storage to save presets."));
+        }
     });
 }
 
 export function deactivateSaveButton(){
-    const saveButton = dom.getElementById("savePreset");
-    saveButton.disabled = true;
+    dom.buttons.savePresetButton.disabled = true;
 }
 
 function presetNameChange(preset, newName){

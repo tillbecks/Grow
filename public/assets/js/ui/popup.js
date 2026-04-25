@@ -15,5 +15,3 @@ export function hidePopup(){
 
     popup.classList.toggle("active", false);
 }
-
-
