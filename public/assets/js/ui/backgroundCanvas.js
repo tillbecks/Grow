@@ -2,27 +2,29 @@ import { SECONDARYCOLOR } from "../config/appConfig.js";
 import state from "../state/state.js";
 import dom from "../state/domState.js";
 
-
-const resizeObserver = new ResizeObserver(() => {
-    redrawCanvas();
-});
-
-//Observe the info section for size changes to adjust the canvas size accordingly
-resizeObserver.observe(dom.infoSection);
-
 //on window resize, adjust canvas size and redraw background
-window.addEventListener('resize', () => {
-    dom.backgroundCanvas.width = window.innerWidth;
-    dom.backgroundCanvas.height = window.innerHeight;
+dom.window.addEventListener('resize', () => {
+    dom.backgroundCanvas.width = dom.window.innerWidth;
+    dom.backgroundCanvas.height = dom.window.innerHeight;
     
     // Reset context properties (they get reset when canvas size changes)
 
     redrawCanvas();
 });
 
+dom.window.addEventListener('scroll', () => {
+    redrawCanvas();
+});
+
 dom.canvasScrollContainer.addEventListener('scroll', () => {
     redrawCanvas();
 });
+
+const resizeObserver = new ResizeObserver(() => {
+    redrawCanvas();
+});
+//Observe the info section for size changes to adjust the canvas size accordingly
+resizeObserver.observe(dom.canvasScrollContainer);
 
 function redrawCanvas(){
     if(!state.editModeState.editMode){
@@ -38,8 +40,8 @@ function redrawCanvas(){
 }   
 
 export function initCanvas(){
-    dom.backgroundCanvas.width = window.innerWidth;
-    dom.backgroundCanvas.height = window.innerHeight;
+    dom.backgroundCanvas.width = dom.window.innerWidth;
+    dom.backgroundCanvas.height = dom.window.innerHeight;
     
     dom.backgroundCanvasContext.lineCap = "round";
     dom.backgroundCanvasContext.lineJoin = "round";

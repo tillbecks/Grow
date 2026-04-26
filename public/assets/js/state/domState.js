@@ -3,6 +3,7 @@ import * as DRAWING from "../canvas/canvasDrawing.js";
 
 class domState{
     constructor(){
+        this.window = window;
         this.body = document.body;
 
         const canvas = this.initCanvas();
