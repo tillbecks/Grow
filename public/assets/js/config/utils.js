@@ -14,7 +14,7 @@ export function normalizeVector(vector) {
  * Calculates the directional vector between two points
  * @param {Array} point1 - The first point
  * @param {Array} point2 - The second point
- * @returns {Array} The direction vector
+ * @returns {Array} The direction vector pointing from point1 to point2
  */
 export function directionVector(point1, point2){
     return [point2[0] - point1[0], point2[1] - point1[1]];

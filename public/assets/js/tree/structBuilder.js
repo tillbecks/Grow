@@ -1,4 +1,5 @@
 import * as TREE from "./tree.js";
+import * as UTILS from "../config/utils.js";
 
 /**
  * Creates root nodes for each stroke that has a start point. 
@@ -66,7 +67,26 @@ function createStructsFromStrokes(strokes, strokeIndex, startPointPosition, join
             //Iterating down from the start point
             for(let i=start; i>=0;i--){
                 if(i!== start){
-                    thisNode = new TREE.Node(config, stroke[i], lastNode, [], []);
+                    if(i==0){
+                        //This way the end node of the struct is a mutating node, that acts like a "tip"
+                        let direction = [0, 0];
+                        //Find the last point where the direction is not 0
+                        for(let k = 0; k <= start; k++){
+                            let currentDirection = UTILS.normalizedDirectionVector(stroke[k+1], stroke[k]);
+                            if(currentDirection[0] !== 0 || currentDirection[1] !== 0){
+                                direction = currentDirection;
+                                break;
+                            }
+                        }
+                        //If the direction is still 0, assign a random direction vector.
+                        if(direction[0] === 0 && direction[1] === 0){
+                            direction = UTILS.rotateVectorZ([1,0], UTILS.randomNumberInRange(0, 2*Math.PI));
+                        }
+                        thisNode = new TREE.MutatingNode(config, stroke[i], lastNode, [], direction, direction, [] );
+                    }
+                    else{
+                        thisNode = new TREE.Node(config, stroke[i], lastNode, [], []);
+                    }
                     lastNode.descendants.push(thisNode);
                     lastNode = thisNode;
                 }
@@ -94,7 +114,25 @@ function createStructsFromStrokes(strokes, strokeIndex, startPointPosition, join
             //Iterating up from the start point
             for(let i=start; i<stroke.length; i++){
                 if(i!== start){
-                    thisNode = new TREE.Node(config, stroke[i], lastNode, [], []);
+                    if(i==stroke.length-1){
+                        let direction = [0, 0];
+                        //Find the last point where the direction is not 0
+                        for(let k = stroke.length - 1; k >= start; k--){
+                            let currentDirection = UTILS.normalizedDirectionVector(stroke[k-1], stroke[k]);
+                            if(currentDirection[0] !== 0 || currentDirection[1] !== 0){
+                                direction = currentDirection;
+                                break;
+                            }
+                        }
+                        //If the direction is still 0, assign a random direction vector
+                        if(direction[0] === 0 && direction[1] === 0){
+                            direction = UTILS.rotateVectorZ([1,0], UTILS.randomNumberInRange(0, 2*Math.PI));
+                        }
+                        thisNode = new TREE.MutatingNode(config, stroke[i], lastNode, [], direction, direction, [] );
+                    }
+                    else{
+                        thisNode = new TREE.Node(config, stroke[i], lastNode, [], []);
+                    }
                     lastNode.descendants.push(thisNode);
                     lastNode = thisNode;
                 }
