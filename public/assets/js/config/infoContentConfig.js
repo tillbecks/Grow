@@ -177,5 +177,12 @@ export const INFORMATIONCONTENT = {
         text: "Here you can adjust each setting in detail. Click any setting name to read what it does. Warning: extreme values can create slow, dense growth.",
         imagePosition: IMAGEPOSITION.SIDEBAR,
         images: []
+    },
+
+    structEndsTips: {
+        title: "Struct Ends As Tips",
+        text: "When enabled, the end node of each structure is a mutating node that can sprout from it's tip. When disabled, only side branches can grow from their tips.",
+        imagePosition: IMAGEPOSITION.GALERY,
+        images: [{"src": imgPath("endsastipstrue.png"), "alt": "", "description": "With 'Struct Ends As Tips' enabled, the end nodes of branches can sprout from their tips and therefore grow 'longer'. "}, {"src": imgPath("endsastipsfalse.png"), "alt": "", "description": "With 'Struct Ends As Tips' disabled, only side branches can grow from their tips."}]
     }
 }

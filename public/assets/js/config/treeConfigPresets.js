@@ -23,6 +23,7 @@ const defaultConfig = {
     crowdingFactor: 0.90,
 
     minSproutingAge: 25,
+    endsAsTips: true,
 };
 
 const fishBone = {
@@ -42,7 +43,8 @@ const fishBone = {
     secondarySproutingRate: 0.0031,
     sproutingGrowProb: 0.05,
     sproutingLength: 20,
-    standardSproutAngle: 2.251474735072685
+    standardSproutAngle: 2.251474735072685,
+    endsAsTips: false,
 };
 
 const bigBranch = {
@@ -63,6 +65,7 @@ const bigBranch = {
     sproutingGrowProb: 0.28,
     sproutingLength: 5,
     standardSproutAngle: 1.5707963267948966,
+    endsAsTips: true,
 };
 
 const lightning = {
@@ -82,7 +85,8 @@ const lightning = {
     secondarySproutingRate: 0.0013,
     sproutingGrowProb: 0.21,
     sproutingLength: 10,
-    standardSproutAngle: 3.141592653589793
+    standardSproutAngle: 3.141592653589793,
+    endsAsTips: false,
 };
 
 const cityMap = {
@@ -102,7 +106,8 @@ const cityMap = {
     secondarySproutingRate: 0.0262,
     sproutingGrowProb: 0.1,
     sproutingLength: 12,
-    standardSproutAngle: 1.4486232791552935
+    standardSproutAngle: 1.4486232791552935,
+    endsAsTips: false,
 };
 
 const denseWeb = {
@@ -123,6 +128,7 @@ const denseWeb = {
     crowdingMinDist:30,
     crowdingFactor:0.9,
     minSproutingAge:25,
+    endsAsTips: true,
 };
 
 const oldWillow = {
@@ -143,6 +149,7 @@ const oldWillow = {
     sproutingGrowProb: 0.96,
     sproutingLength: 7,
     standardSproutAngle: 0,
+    endsAsTips: true,
 };
 
 const fluff = {
@@ -162,7 +169,8 @@ const fluff = {
     secondarySproutingRate: 0.0008,
     sproutingGrowProb: 0.45,
     sproutingLength: 5,
-    standardSproutAngle: 1.5707963267948966
+    standardSproutAngle: 1.5707963267948966,
+    endsAsTips: false,
 };
 
 const bigShock = {

@@ -27,3 +27,11 @@ export function synchronizerLabelName(mainId, secondaryId){
 export function synchronizerCheckboxName(mainId, secondaryId){
     return `sync${mainId}${secondaryId}Check`;
 }
+
+export function checkboxLabelName(id){
+    return `${id}CheckboxLabel`;
+}
+
+export function checkboxName(id){
+    return `${id}Checkbox`;
+}

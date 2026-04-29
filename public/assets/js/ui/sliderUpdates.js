@@ -1,8 +1,9 @@
 import state from "../state/state.js";
-import { TREECONFIGVARIABLES } from "../config/sliderConfig.js";
+import { TREECONFIGVARIABLES, NumericVariable, BooleanVariable } from "../config/sliderConfig.js";
 import * as SLIDERNAMING from "../config/sliderNaming.js";
 import { setCustomValue } from "./presetLoader.js";
 import dom from "../state/domState.js";
+
 
 let ignoreSync = false;
 
@@ -10,6 +11,15 @@ export function bindSliderToConfig(sliderId, valueId, configKey, conversionFunc 
     dom.getElementById(sliderId).addEventListener("input", (event)=>{
         dom.getElementById(valueId).textContent = event.target.value;
         state.treeConfig[configKey] = conversionFunc(parseFloat(event.target.value));
+        if(!ignoreSync){
+            setCustomValue();
+        }
+    });
+}
+
+export function bindCheckboxToConfig(checkboxId, configKey){
+    dom.getElementById(checkboxId).addEventListener("change", (event)=>{
+        state.treeConfig[configKey] = event.target.checked;
         if(!ignoreSync){
             setCustomValue();
         }
@@ -108,15 +118,25 @@ export function bindSynchronizer(checkboxId, mainId, secondaryId){
 export function updateSlidersFromConfig(config){
     ignoreSync = true;
     for(let configKey in TREECONFIGVARIABLES){
-        const sliderId = SLIDERNAMING.sliderName(configKey);
-        if(Object.hasOwn(config, configKey)){
-            const slider = dom.getElementById(sliderId);
-            let value = config[configKey];
+        if(TREECONFIGVARIABLES[configKey] instanceof BooleanVariable){
+            const checkboxId = SLIDERNAMING.checkboxName(configKey);
+            if(Object.hasOwn(config, configKey)){
+                const checkbox = dom.getElementById(checkboxId);
+                checkbox.checked = config[configKey];
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        }
+        else if(TREECONFIGVARIABLES[configKey] instanceof NumericVariable){
+            const sliderId = SLIDERNAMING.sliderName(configKey);
+            if(Object.hasOwn(config, configKey)){
+                const slider = dom.getElementById(sliderId);
+                let value = config[configKey];
 
-            value = TREECONFIGVARIABLES[configKey].inverseFunc(value);
+                value = TREECONFIGVARIABLES[configKey].inverseFunc(value);
 
-            slider.value = value;
-            slider.dispatchEvent(new Event('input'));
+                slider.value = value;
+                slider.dispatchEvent(new Event('input'));
+            }
         }
     }
     ignoreSync = false; 

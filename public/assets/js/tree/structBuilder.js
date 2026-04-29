@@ -67,7 +67,7 @@ function createStructsFromStrokes(strokes, strokeIndex, startPointPosition, join
             //Iterating down from the start point
             for(let i=start; i>=0;i--){
                 if(i!== start){
-                    if(i==0){
+                    if(i==0 && config.endsAsTips){
                         //This way the end node of the struct is a mutating node, that acts like a "tip"
                         let direction = [0, 0];
                         //Find the last point where the direction is not 0
@@ -114,7 +114,7 @@ function createStructsFromStrokes(strokes, strokeIndex, startPointPosition, join
             //Iterating up from the start point
             for(let i=start; i<stroke.length; i++){
                 if(i!== start){
-                    if(i==stroke.length-1){
+                    if(i==stroke.length-1 && config.endsAsTips){
                         let direction = [0, 0];
                         //Find the last point where the direction is not 0
                         for(let k = stroke.length - 1; k >= start; k--){

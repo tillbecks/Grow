@@ -1,6 +1,6 @@
 import * as INFOBOX from "./infoBox.js";
 import * as SLIDERUPDATES from "./sliderUpdates.js";
-import { TREECONFIGVARIABLES, SLIDERSECTIONS } from "../config/sliderConfig.js";
+import { TREECONFIGVARIABLES, SLIDERSECTIONS, BooleanVariable, NumericVariable } from "../config/sliderConfig.js";
 import * as SLIDERNAMING from "../config/sliderNaming.js";
 import dom from "../state/domState.js";
 
@@ -55,6 +55,32 @@ function createSlider(id, config, container) {
     SLIDERUPDATES.bindButtonToSlider(incrBtn.id, slider.id, 1);
 }
 
+function createCheckbox(id, config, container){
+    const { label, defaultValue, description } = config;
+
+    const labelCheck = dom.createElement("p");
+    labelCheck.id = SLIDERNAMING.checkboxLabelName(id);
+    labelCheck.className = "slider-label";
+    labelCheck.textContent = label;
+    container.appendChild(labelCheck);
+    INFOBOX.bindObjectToInfoBox(labelCheck.id, description);
+
+    const checkbox = dom.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = SLIDERNAMING.checkboxName(id);
+    checkbox.className = "checkbox";
+    checkbox.checked = defaultValue;
+    checkbox.autocomplete = "off";
+    container.appendChild(checkbox);
+
+    for(let i = 0; i < 3; i++){
+        const emptyDiv = dom.createElement("div");
+        container.appendChild(emptyDiv);
+    }
+
+    SLIDERUPDATES.bindCheckboxToConfig(checkbox.id, id);
+}
+
 function createSynchronizer(config, container){
     const { label, main, secondary, description } = config;
 
@@ -99,7 +125,12 @@ export function createSliderSection(){
                     createSynchronizer(synchronizer, sectionContainer);
                 }
             }
-            createSlider(variable, TREECONFIGVARIABLES[variable], sectionContainer);
+            if(TREECONFIGVARIABLES[variable] instanceof BooleanVariable){
+                createCheckbox(variable, TREECONFIGVARIABLES[variable], sectionContainer);
+            }
+            else if(TREECONFIGVARIABLES[variable] instanceof NumericVariable){
+                createSlider(variable, TREECONFIGVARIABLES[variable], sectionContainer);
+            }
         }
 
         for(const synchronizer of SLIDERSECTIONS[section].synchronizer){
